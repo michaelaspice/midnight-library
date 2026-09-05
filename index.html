@@ -99,6 +99,13 @@ box-shadow:inset 0 0 60px #0009,0 20px 30px #0006}
 .reader-select{background:#241a12;color:var(--ink);border:1px solid #725a3c;border-radius:9px;padding:8px 10px}
 .progress-text{font-size:12px;color:var(--muted)}
 .local-upload{display:none}
+.auth-panel{position:fixed;inset:0;background:#090705eF;z-index:80;display:none;place-items:center;padding:20px}
+.auth-panel.open{display:grid}
+.auth-card{width:min(440px,94vw);background:#17120e;border:1px solid rgba(198,161,91,.35);border-radius:18px;padding:28px;box-shadow:0 30px 90px #000}
+.auth-card h3{font-size:34px;margin-bottom:8px}.auth-card p{color:var(--muted);line-height:1.55}
+.auth-card input{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #6e5738;background:#0f0c09;color:var(--ink);margin:12px 0}
+.auth-note{font-size:12px;color:var(--muted)}
+.upload-status{margin-top:12px;font-size:13px;color:var(--gold2)}
 .placeholder{display:grid;place-items:center;text-align:center;padding:30px}
 .placeholder-inner{max-width:520px}
 .placeholder h3{font-size:38px;margin-bottom:10px}
@@ -117,12 +124,14 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header class="topbar">
   <div class="brand">✦ The Midnight Library</div>
   <div class="nav-actions">
-    <button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
+    <button class="icon-btn" id="authBtn">🔐 Enter library</button>
+<button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
   </div>
 </header>
 
@@ -169,7 +178,18 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
   </div>
 </main>
 
-<input class="local-upload" id="localEpubInput" type="file" accept=".epub,application/epub+zip">
+<input class="local-upload" id="privateBookInput" type="file" accept=".epub,application/epub+zip">
+<div class="auth-panel" id="authPanel">
+  <div class="auth-card">
+    <div class="kicker">Private collection</div>
+    <h3>Unlock the library</h3>
+    <p>Sign in with a magic link. Your books stay in a private Supabase bucket and are only readable by the library owner.</p>
+    <input id="authEmail" type="email" placeholder="Your email address" autocomplete="email">
+    <button class="icon-btn" id="sendMagicLink">Send magic link</button>
+    <button class="icon-btn" id="closeAuth">Cancel</button>
+    <div class="upload-status" id="authStatus"></div>
+  </div>
+</div>
 <div class="reader" id="reader" aria-hidden="true">
   <div class="reader-card">
     <div class="reader-head">
@@ -190,6 +210,11 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 
 <script src="catalog.js"></script>
 <script>
+const SUPABASE_URL='https://hnxdhetapxnwfrczosqy.supabase.co';
+const SUPABASE_KEY='sb_publishable_DZUEqmuiaIgeXklTsPsojQ_H3zAOr2l';
+const supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let sessionUser=null, ownerAccess=false, pendingUploadBook=null;
+
 const books = window.MIDNIGHT_BOOKS || [];
 const collections = document.getElementById('collections');
 const wings = document.getElementById('wings');
@@ -265,19 +290,41 @@ function openBook(b){
   document.getElementById('readerBook').textContent=b.title;
   document.getElementById('readerAuthor').textContent=b.author+' · '+b.collection+' · '+b.format;
   syncReaderButtons();
-  if(b.file){
-    readerBody.innerHTML='<iframe title="'+b.title+'" src="'+b.file+'#view=FitH"></iframe>';
-  }else if((b.format||'').toUpperCase()==='EPUB'){
-    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📖</div><h3>'+b.title+'</h3><p>Your copy stays on your device. Choose the matching EPUB and Midnight Library will open it here without uploading the file to GitHub.</p><button class="icon-btn" id="chooseLocalEpub">Choose my EPUB</button><p><small>For browser security, you choose the file again after a full browser restart. Reading position is remembered locally.</small></p></div></div>';
-    document.getElementById('chooseLocalEpub').addEventListener('click',()=>document.getElementById('localEpubInput').click());
+
+  if((b.format||'').toUpperCase()==='EPUB'){
+    openPrivateEpub(b);
   }else{
-    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📄</div><h3>'+b.title+'</h3><p>This title is catalogued as '+b.format+'. Local EPUB reading is enabled now; DOC/PDF support can be added separately.</p></div></div>';
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📄</div><h3>'+b.title+'</h3><p>This title is catalogued as '+b.format+'. EPUB cloud reading is enabled first; DOC/PDF support comes next.</p></div></div>';
   }
+}
+
+async function openPrivateEpub(b){
+  if(!sessionUser){
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">🔐</div><h3>'+b.title+'</h3><p>Unlock your private library first. After that, books stored in the vault open with one click.</p><button class="icon-btn" id="unlockHere">Unlock library</button></div></div>';
+    document.getElementById('unlockHere').onclick=()=>openAuth();
+    return;
+  }
+  if(!ownerAccess){
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">🗝️</div><h3>Private collection</h3><p>This account is not authorized to read the private collection.</p></div></div>';
+    return;
+  }
+
+  readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">⌛</div><h3>Opening '+b.title+'</h3><p>Checking the private vault…</p></div></div>';
+  const {data,error}=await supa.storage.from('midnight-books').download(b.storagePath);
+  if(!error && data){
+    await loadEpubArrayBuffer(await data.arrayBuffer());
+    return;
+  }
+
+  readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📚</div><h3>'+b.title+'</h3><p>This volume is catalogued but its private copy has not been added to the vault yet.</p><button class="icon-btn" id="addPrivateCopy">Add my private copy once</button><p><small>After this one-time upload, clicking the book opens it directly on any device where you are signed in.</small></p><div class="upload-status" id="bookUploadStatus"></div></div></div>';
+  document.getElementById('addPrivateCopy').onclick=()=>{
+    pendingUploadBook=b;
+    document.getElementById('privateBookInput').click();
+  };
 }
 
 
 let epubBook=null, epubRendition=null;
-const localInput=document.getElementById('localEpubInput');
 
 function destroyEpub(){
   try{ if(epubRendition) epubRendition.destroy(); }catch(e){}
@@ -285,10 +332,9 @@ function destroyEpub(){
   epubRendition=null; epubBook=null;
 }
 
-async function loadLocalEpub(file){
-  if(!activeBook || !file) return;
+async function loadEpubArrayBuffer(buf){
+  if(!activeBook || !buf) return;
   destroyEpub();
-  const buf=await file.arrayBuffer();
   readerBody.innerHTML=
     '<div class="epub-shell">'+
       '<div class="epub-toolbar">'+
@@ -302,7 +348,7 @@ async function loadLocalEpub(file){
 
   epubBook=ePub(buf);
   epubRendition=epubBook.renderTo('epubViewer',{width:'100%',height:'100%',spread:'auto',flow:'paginated'});
-  epubRendition.themes.register('paper',{body:{background:'#efe6cf',color:'#2b2218','font-family':'Georgia, serif','line-height':'1.6'},p:{'font-size':'1em'}});
+  epubRendition.themes.register('paper',{body:{background:'#efe6cf',color:'#2b2218','font-family':'Georgia, serif','line-height':'1.6'}});
   epubRendition.themes.register('night',{body:{background:'#12100e',color:'#e8dfcf','font-family':'Georgia, serif','line-height':'1.65'}});
   epubRendition.themes.register('white',{body:{background:'#ffffff',color:'#1d1d1d','font-family':'Georgia, serif','line-height':'1.6'}});
   epubRendition.themes.select('paper');
@@ -310,7 +356,6 @@ async function loadLocalEpub(file){
 
   const savedCfi=(stateFor(activeBook).cfi)||null;
   await epubRendition.display(savedCfi||undefined);
-
   let fontPct=100;
   document.getElementById('fontDown').onclick=()=>{fontPct=Math.max(70,fontPct-10);epubRendition.themes.fontSize(fontPct+'%')};
   document.getElementById('fontUp').onclick=()=>{fontPct=Math.min(180,fontPct+10);epubRendition.themes.fontSize(fontPct+'%')};
@@ -318,31 +363,67 @@ async function loadLocalEpub(file){
   document.getElementById('epubPrev').onclick=()=>epubRendition.prev();
   document.getElementById('epubNext').onclick=()=>epubRendition.next();
 
-  try{
-    await epubBook.ready;
-    await epubBook.locations.generate(1200);
-  }catch(e){}
-
+  try{ await epubBook.ready; await epubBook.locations.generate(1200); }catch(e){}
   epubRendition.on('relocated',loc=>{
     const cfi=loc.start.cfi;
     const pct=epubBook.locations && epubBook.locations.length() ? epubBook.locations.percentageFromCfi(cfi) : 0;
     const progress=document.getElementById('epubProgress');
     if(progress) progress.textContent=pct ? Math.round(pct*100)+'% · progress saved' : 'Reading position saved';
-    saved[activeBook.id]={...stateFor(activeBook),cfi:cfi,status:'reading',localFileName:file.name};
+    saved[activeBook.id]={...stateFor(activeBook),cfi,status:'reading'};
     persist(); updateStats();
   });
 }
 
-localInput.addEventListener('change',async e=>{
+document.getElementById('privateBookInput').addEventListener('change',async e=>{
   const file=e.target.files && e.target.files[0];
-  if(!file) return;
-  if(!file.name.toLowerCase().endsWith('.epub')){
-    alert('Please choose an EPUB file.');
-    return;
-  }
-  await loadLocalEpub(file);
-  localInput.value='';
+  const b=pendingUploadBook;
+  if(!file||!b) return;
+  const status=document.getElementById('bookUploadStatus');
+  if(!file.name.toLowerCase().endsWith('.epub')){ if(status)status.textContent='Please choose an EPUB file.'; return; }
+  if(status)status.textContent='Encrypting the door… uploading private copy.';
+  const {error}=await supa.storage.from('midnight-books').upload(b.storagePath,file,{contentType:'application/epub+zip',upsert:true});
+  if(error){ if(status)status.textContent='Upload failed: '+error.message; return; }
+  if(status)status.textContent='Added to the private vault. Opening…';
+  pendingUploadBook=null;
+  await loadEpubArrayBuffer(await file.arrayBuffer());
+  e.target.value='';
 });
+
+function openAuth(){document.getElementById('authPanel').classList.add('open')}
+function closeAuth(){document.getElementById('authPanel').classList.remove('open')}
+document.getElementById('authBtn').onclick=async()=>{
+  if(sessionUser){
+    await supa.auth.signOut(); sessionUser=null; ownerAccess=false; updateAuthButton();
+  }else openAuth();
+};
+document.getElementById('closeAuth').onclick=closeAuth;
+document.getElementById('sendMagicLink').onclick=async()=>{
+  const email=document.getElementById('authEmail').value.trim();
+  const status=document.getElementById('authStatus');
+  if(!email){status.textContent='Enter your email first.';return}
+  status.textContent='Sending magic link…';
+  const {error}=await supa.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
+  status.textContent=error?error.message:'Magic link sent. Open it, then return here.';
+};
+function updateAuthButton(){
+  document.getElementById('authBtn').textContent=sessionUser?'🔓 Leave library':'🔐 Enter library';
+}
+async function refreshAuth(){
+  const {data:{session}}=await supa.auth.getSession();
+  sessionUser=session?.user||null; ownerAccess=false;
+  if(sessionUser){
+    const {data:claimed}=await supa.rpc('claim_midnight_library');
+    ownerAccess=claimed===true;
+  }
+  updateAuthButton();
+}
+supa.auth.onAuthStateChange(async(_event,session)=>{
+  sessionUser=session?.user||null; ownerAccess=false;
+  if(sessionUser){
+    setTimeout(async()=>{const {data}=await supa.rpc('claim_midnight_library');ownerAccess=data===true;updateAuthButton();closeAuth()},0);
+  }else updateAuthButton();
+});
+refreshAuth();
 
 function syncReaderButtons(){
   if(!activeBook)return;
