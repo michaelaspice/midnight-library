@@ -13,7 +13,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-philosopher-s-stone.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-chamber-of-secrets",
@@ -29,7 +30,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-chamber-of-secrets.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-prisoner-of-azkaban",
@@ -45,7 +47,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-prisoner-of-azkaban.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-goblet-of-fire",
@@ -61,7 +64,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-goblet-of-fire.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-order-of-the-phoenix",
@@ -77,7 +81,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-order-of-the-phoenix.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-half-blood-prince",
@@ -93,7 +98,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-half-blood-prince.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-deathly-hallows",
@@ -109,7 +115,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-deathly-hallows.epub"
   },
   {
     "id": "harry-potter-harry-potter-and-the-cursed-child",
@@ -125,7 +132,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "harry-potter-harry-potter-and-the-cursed-child.epub"
   },
   {
     "id": "the-witcher-the-road-with-no-return",
@@ -141,7 +149,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-the-road-with-no-return.epub"
   },
   {
     "id": "the-witcher-the-last-wish",
@@ -157,7 +166,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-the-last-wish.epub"
   },
   {
     "id": "the-witcher-sword-of-destiny",
@@ -173,7 +183,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-sword-of-destiny.epub"
   },
   {
     "id": "the-witcher-blood-of-elves",
@@ -189,7 +200,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-blood-of-elves.epub"
   },
   {
     "id": "the-witcher-the-time-of-contempt",
@@ -205,7 +217,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-the-time-of-contempt.epub"
   },
   {
     "id": "the-witcher-baptism-of-fire",
@@ -221,7 +234,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-baptism-of-fire.epub"
   },
   {
     "id": "the-witcher-the-tower-of-the-swallow",
@@ -237,7 +251,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-the-tower-of-the-swallow.epub"
   },
   {
     "id": "the-witcher-the-lady-of-the-lake",
@@ -253,7 +268,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-the-lady-of-the-lake.epub"
   },
   {
     "id": "the-witcher-season-of-storms",
@@ -269,7 +285,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-witcher-season-of-storms.epub"
   },
   {
     "id": "the-vampire-diaries-the-awakening",
@@ -285,7 +302,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-awakening.epub"
   },
   {
     "id": "the-vampire-diaries-the-struggle",
@@ -301,7 +319,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-struggle.epub"
   },
   {
     "id": "the-vampire-diaries-the-fury",
@@ -317,7 +336,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-fury.epub"
   },
   {
     "id": "the-vampire-diaries-dark-reunion",
@@ -333,7 +353,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-dark-reunion.epub"
   },
   {
     "id": "the-vampire-diaries-the-return-nightfall",
@@ -349,7 +370,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-return-nightfall.epub"
   },
   {
     "id": "the-vampire-diaries-the-return-shadow-souls",
@@ -365,7 +387,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-return-shadow-souls.epub"
   },
   {
     "id": "the-vampire-diaries-the-return",
@@ -381,7 +404,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-return.epub"
   },
   {
     "id": "the-vampire-diaries-the-hunters-phantom",
@@ -397,7 +421,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-vampire-diaries-the-hunters-phantom.epub"
   },
   {
     "id": "the-originals-the-rise",
@@ -413,7 +438,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-originals-the-rise.epub"
   },
   {
     "id": "the-originals-the-loss",
@@ -429,7 +455,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-originals-the-loss.epub"
   },
   {
     "id": "the-originals-the-resurrection",
@@ -445,7 +472,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-originals-the-resurrection.epub"
   },
   {
     "id": "the-lord-of-the-rings-the-fellowship-of-the-ring",
@@ -461,7 +489,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-lord-of-the-rings-the-fellowship-of-the-ring.epub"
   },
   {
     "id": "the-lord-of-the-rings-the-two-towers",
@@ -477,7 +506,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-lord-of-the-rings-the-two-towers.epub"
   },
   {
     "id": "the-lord-of-the-rings-the-return-of-the-king",
@@ -493,7 +523,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "the-lord-of-the-rings-the-return-of-the-king.epub"
   },
   {
     "id": "silo-silo-the-complete-series",
@@ -509,7 +540,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "silo-silo-the-complete-series.epub"
   },
   {
     "id": "bridgerton-the-duke-and-i",
@@ -525,7 +557,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-the-duke-and-i.epub"
   },
   {
     "id": "bridgerton-the-viscount-who-loved-me",
@@ -541,7 +574,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-the-viscount-who-loved-me.epub"
   },
   {
     "id": "bridgerton-an-offer-from-a-gentleman",
@@ -557,7 +591,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-an-offer-from-a-gentleman.epub"
   },
   {
     "id": "bridgerton-romancing-mister-bridgerton",
@@ -573,7 +608,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-romancing-mister-bridgerton.epub"
   },
   {
     "id": "bridgerton-to-sir-phillip-with-love",
@@ -589,7 +625,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-to-sir-phillip-with-love.epub"
   },
   {
     "id": "bridgerton-when-he-was-wicked",
@@ -605,7 +642,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-when-he-was-wicked.epub"
   },
   {
     "id": "bridgerton-it-s-in-his-kiss",
@@ -621,7 +659,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-it-s-in-his-kiss.epub"
   },
   {
     "id": "bridgerton-on-the-way-to-the-wedding",
@@ -637,7 +676,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-on-the-way-to-the-wedding.epub"
   },
   {
     "id": "bridgerton-the-bridgertons-happily-ever-after",
@@ -653,7 +693,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "bridgerton-the-bridgertons-happily-ever-after.epub"
   },
   {
     "id": "arsene-lupin-the-extraordinary-adventures-of-arsene-lupin-gentleman-burglar",
@@ -669,7 +710,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-extraordinary-adventures-of-arsene-lupin-gentleman-burglar.epub"
   },
   {
     "id": "arsene-lupin-arsene-lupin-vs-herlock-sholmes",
@@ -685,7 +727,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-arsene-lupin-vs-herlock-sholmes.epub"
   },
   {
     "id": "arsene-lupin-arsene-lupin",
@@ -701,7 +744,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-arsene-lupin.epub"
   },
   {
     "id": "arsene-lupin-the-hollow-needle",
@@ -717,7 +761,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-hollow-needle.epub"
   },
   {
     "id": "arsene-lupin-813",
@@ -733,7 +778,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-813.epub"
   },
   {
     "id": "arsene-lupin-the-crystal-stopper",
@@ -749,7 +795,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-crystal-stopper.epub"
   },
   {
     "id": "arsene-lupin-the-confessions-of-arsene-lupin",
@@ -765,7 +812,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-confessions-of-arsene-lupin.epub"
   },
   {
     "id": "arsene-lupin-the-woman-of-mystery",
@@ -781,7 +829,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-woman-of-mystery.epub"
   },
   {
     "id": "arsene-lupin-the-golden-triangle",
@@ -797,7 +846,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-golden-triangle.epub"
   },
   {
     "id": "arsene-lupin-the-secret-of-sarek",
@@ -813,7 +863,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-secret-of-sarek.epub"
   },
   {
     "id": "arsene-lupin-the-teeth-of-the-tiger",
@@ -829,7 +880,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-teeth-of-the-tiger.epub"
   },
   {
     "id": "arsene-lupin-the-eight-strokes-of-the-clock",
@@ -845,7 +897,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "arsene-lupin-the-eight-strokes-of-the-clock.epub"
   },
   {
     "id": "t-h-white-mistress-masham-s-repose",
@@ -861,7 +914,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-mistress-masham-s-repose.epub"
   },
   {
     "id": "t-h-white-darkness-at-pemberley",
@@ -877,7 +931,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-darkness-at-pemberley.epub"
   },
   {
     "id": "t-h-white-the-candle-in-the-wind",
@@ -893,7 +948,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-the-candle-in-the-wind.epub"
   },
   {
     "id": "t-h-white-they-winter-abroad",
@@ -909,7 +965,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-they-winter-abroad.epub"
   },
   {
     "id": "t-h-white-the-witch-in-the-wood",
@@ -925,7 +982,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-the-witch-in-the-wood.epub"
   },
   {
     "id": "t-h-white-the-sword-in-the-stone",
@@ -941,7 +999,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-the-sword-in-the-stone.epub"
   },
   {
     "id": "t-h-white-the-once-and-future-king",
@@ -957,7 +1016,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-the-once-and-future-king.epub"
   },
   {
     "id": "t-h-white-the-ill-made-knight",
@@ -973,7 +1033,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "t-h-white-the-ill-made-knight.epub"
   },
   {
     "id": "mind-self-the-art-of-thinking-clearly",
@@ -989,7 +1050,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-the-art-of-thinking-clearly.epub"
   },
   {
     "id": "mind-self-the-power-of-now",
@@ -1005,7 +1067,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-the-power-of-now.epub"
   },
   {
     "id": "mind-self-how-to-win-friends-and-influence-people",
@@ -1021,7 +1084,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "DOC",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": null
   },
   {
     "id": "mind-self-change-your-brain-change-your-body",
@@ -1037,7 +1101,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-change-your-brain-change-your-body.epub"
   },
   {
     "id": "mind-self-flash-foresight",
@@ -1053,7 +1118,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-flash-foresight.epub"
   },
   {
     "id": "mind-self-unleash-the-power-of-the-female-brain",
@@ -1069,7 +1135,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "medium",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-unleash-the-power-of-the-female-brain.epub"
   },
   {
     "id": "mind-self-the-upside-of-irrationality",
@@ -1085,7 +1152,8 @@ window.MIDNIGHT_BOOKS = [
     "size": "tall",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-the-upside-of-irrationality.epub"
   },
   {
     "id": "mind-self-promote-yourself",
@@ -1101,6 +1169,7 @@ window.MIDNIGHT_BOOKS = [
     "size": "short",
     "format": "EPUB",
     "file": null,
-    "private": true
+    "private": true,
+    "storagePath": "mind-self-promote-yourself.epub"
   }
 ];
