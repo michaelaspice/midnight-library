@@ -145,6 +145,80 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
  .hero{min-height:auto;padding-top:45px}.arch{padding:58px 18px 45px}.section-head{align-items:start;flex-direction:column}.shelf{padding-left:10px;padding-right:10px}.book{flex-basis:52px}.candle{display:none}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+
+/* === Midnight Library cinematic dashboard === */
+:root{--sidebar:230px}
+body{background:#090806!important}
+.side-nav{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:40;padding:28px 16px;background:
+linear-gradient(180deg,rgba(16,11,8,.97),rgba(11,8,6,.96));
+border-right:1px solid rgba(216,165,91,.22);box-shadow:22px 0 70px #0008;display:flex;flex-direction:column;gap:6px}
+.side-logo{font-size:34px;color:#ffd899;text-shadow:0 0 18px #ff9b47;margin:0 0 20px 12px}
+.side-nav button{border:0;background:transparent;color:#dbcbb5;padding:11px 13px;border-radius:11px;text-align:left;font:500 14px "DM Sans",sans-serif;cursor:pointer;display:flex;gap:12px;align-items:center}
+.side-nav button:hover,.side-nav button.active{background:linear-gradient(90deg,rgba(155,88,45,.55),rgba(73,38,20,.28));color:#fff4db;box-shadow:inset 0 0 0 1px rgba(231,172,97,.13),0 0 24px #9d4f1b25}
+.side-quote{margin-top:auto;padding:22px 15px 36px;color:#e2c9a7;font:italic 20px/1.45 "Cormorant Garamond",serif}
+.side-quote small{display:block;margin-top:12px;text-align:right;font-size:16px}
+.topbar{left:var(--sidebar);padding:14px 3vw!important;background:transparent!important;border:0!important;backdrop-filter:none!important;justify-content:flex-end!important}
+.topbar .brand{display:none}
+.nav-actions{background:rgba(14,11,9,.88);border:1px solid rgba(213,161,87,.3);padding:5px 7px;border-radius:18px;box-shadow:0 14px 35px #0008}
+.nav-actions .icon-btn{padding:8px 12px;border:0;background:transparent}
+.nav-actions .icon-btn:hover{background:#2b1d13}
+.hero{margin-left:var(--sidebar);min-height:490px!important;height:54vh;max-height:660px;padding:38px 3vw 15px!important;align-items:center!important}
+.hero-scene{display:none!important}
+.hero:before{content:"";position:absolute;inset:0;background:
+radial-gradient(ellipse at 67% 8%,rgba(84,128,188,.28),transparent 27%),
+radial-gradient(ellipse at 44% 28%,rgba(250,151,65,.11),transparent 20%),
+linear-gradient(180deg,#101724 0%,#10141b 30%,#100c08 100%);z-index:0}
+.hero:after{background:
+radial-gradient(circle at 67% 13%,rgba(239,244,255,.28) 0 3px,transparent 4px),
+radial-gradient(circle at 75% 21%,rgba(255,192,110,.9) 0 1px,transparent 3px),
+radial-gradient(circle at 48% 27%,rgba(255,177,98,.8) 0 1px,transparent 3px),
+linear-gradient(180deg,transparent 0 64%,rgba(9,7,5,.95) 100%)!important;background-size:auto,240px 180px,190px 150px,auto}
+.arch{width:min(980px,88vw)!important;padding:20px 26px 30px!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+.arch>.candle,.stats{display:none!important}
+.title-wrap{position:relative;display:inline-block;padding:12px 34px}
+.title-wrap h1{font-size:clamp(58px,6.5vw,96px)!important;line-height:.92!important;letter-spacing:-.025em}
+.title-wrap h1 small{display:block;font-size:.38em;line-height:.9;margin-left:-64%;color:#f2d8b4;font-weight:600}
+.title-wrap h1 span{
+display:inline-block;background:linear-gradient(90deg,#ffe7bb 0%,#ffc67a 18%,#ff86cb 38%,#fff0c8 55%,#f5a7d7 72%,#ffd28e 88%,#fff0ce 100%);
+background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+filter:drop-shadow(0 0 7px #ffbf7d) drop-shadow(0 0 18px #f87bb655);
+animation:titleShimmer 6s linear infinite}
+@keyframes titleShimmer{to{background-position:220% 0}}
+.hero-tagline{margin-top:14px;color:#ead4b8;font-size:12px;letter-spacing:.46em;text-transform:uppercase;text-shadow:0 1px 6px #000}
+.spark{position:absolute;color:#fff1c8;text-shadow:0 0 7px #fff,0 0 16px #ffb05b,0 0 24px #ff70c2;animation:twinkle 1.8s ease-in-out infinite alternate}
+.s1{left:3%;top:22%;font-size:20px}.s2{right:4%;top:11%;font-size:15px;animation-delay:.4s}.s3{right:11%;bottom:19%;font-size:18px;animation-delay:.9s}.s4{left:17%;bottom:5%;font-size:12px;animation-delay:1.2s}
+@keyframes twinkle{0%{opacity:.2;transform:scale(.65) rotate(0)}100%{opacity:1;transform:scale(1.3) rotate(25deg)}}
+.search-wrap{margin:26px auto 13px!important;max-width:700px!important}
+.search-wrap input{height:52px;background:rgba(9,12,18,.9)!important;border:1px solid rgba(222,171,103,.55)!important;box-shadow:0 0 0 1px #0009,inset 0 0 25px #0008,0 0 24px #d17d3830}
+.filters{gap:6px!important}
+.filter-btn{font-size:12px!important;padding:8px 14px!important;background:rgba(13,13,14,.78)!important;border-color:#493a2b!important}
+.filter-btn.active{background:linear-gradient(#a85a2a,#713816)!important;color:#fff0d3!important;border-color:#e2a566!important;box-shadow:0 0 16px #d97536aa}
+.library{margin-left:var(--sidebar)!important;padding:8px 3vw 70px!important;max-width:none!important;background:
+linear-gradient(90deg,rgba(18,11,7,.97),rgba(11,8,7,.96) 72%,rgba(12,9,8,.98));
+min-height:50vh}
+.section-head{display:none!important}
+.wings{display:none!important}
+#collections{max-width:calc(100vw - var(--sidebar) - 60px);margin-top:0}
+.collection{margin:0 0 18px!important}
+.collection-title{margin:0 0 4px!important;border-top:1px solid rgba(207,147,76,.16);padding-top:9px}
+.collection-title h3{font-size:23px!important;color:#f0dcc1}
+.collection-title span{color:#c99a62!important}
+.collection .shelf{margin-top:0!important;min-height:190px!important;background:
+linear-gradient(180deg,#2a160d 0 5px,#130b07 5px calc(100% - 12px),#4a2816 calc(100% - 12px) calc(100% - 5px),#130b07 calc(100% - 5px));
+border:1px solid #3b2114!important;box-shadow:inset 0 12px 26px #000,0 10px 18px #0007!important;border-radius:3px!important}
+.collection .books{min-height:170px!important;padding:12px 14px 0!important;gap:8px!important}
+.book{height:154px!important;min-width:66px!important;max-width:88px!important;border-radius:4px 4px 1px 1px!important;box-shadow:inset -4px 0 8px #0006,0 4px 8px #0008!important}
+.book .spine-title{font-size:9px!important;letter-spacing:.04em!important;padding-top:12px!important}
+.card-grid,footer{display:none!important}
+.reader{justify-content:flex-end!important;padding:84px 24px 24px calc(var(--sidebar) + 24px)!important;background:rgba(0,0,0,.25)!important}
+.reader-card{width:min(520px,42vw)!important;height:min(76vh,780px)!important;border-radius:14px!important;background:#15110e!important;box-shadow:0 28px 90px #000d,0 0 0 1px rgba(218,163,91,.22)!important}
+.reader-head{padding:13px 14px!important}.reader-title strong{font-family:"Cormorant Garamond",serif;font-size:20px}
+.reader-actions .icon-btn{font-size:11px;padding:7px 9px}
+.morpheus{z-index:32}
+@media(max-width:900px){
+:root{--sidebar:0px}.side-nav{display:none}.topbar{left:0}.hero,.library{margin-left:0!important}.hero{height:auto;min-height:520px!important}.reader{padding:65px 10px 10px!important}.reader-card{width:100%!important;height:85vh!important}.title-wrap h1 small{margin-left:0}.title-wrap h1{font-size:56px!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -156,8 +230,20 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
   <div class="mist m1"></div><div class="mist m2"></div><div class="mist m3"></div>
   <div class="floating-candles" id="floatingCandles"></div>
 </div>
+<aside class="side-nav">
+  <div class="side-logo">📖</div>
+  <button data-wing="all">🎁 <span>All Books</span></button>
+  <button data-wing="Fantasy">🔥 <span>Fantasy</span></button>
+  <button data-wing="Classics & Fantasy">📖 <span>Classics</span></button>
+  <button data-wing="Dystopian">✦ <span>Sci‑Fi</span></button>
+  <button data-wing="Romance">♥ <span>Romance</span></button>
+  <button data-wing="Mind & Self">♨ <span>Mind & Self</span></button>
+  <button data-wing="Mystery">◉ <span>Mystery</span></button>
+  <button data-wing="Supernatural">☾ <span>Supernatural</span></button>
+  <div class="side-quote">“A room without books is like a body without a soul.”<small>— Cicero</small></div>
+</aside>
 <header class="topbar">
-  <div class="brand">✦ The Midnight Library</div>
+  <div class="brand">📚 Library</div>
   <div class="nav-actions">
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
 <button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
@@ -169,11 +255,13 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
   <div class="arch">
     <div class="candle left"><i class="flame"></i></div>
     <div class="candle right"><i class="flame"></i></div>
-    <div class="kicker">Mihaela's private collection</div>
-    <h1>The Midnight<br>Library</h1>
-    <p>A quiet place for books worth keeping. Search the shelves, mark what you've read, save favourites, and return to the page where you left off.</p>
+    <div class="title-wrap">
+      <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><span class="spark s4">✧</span>
+      <h1><small>The</small><span>The Midnight Library</span></h1>
+      <div class="hero-tagline">GOOD BOOKS FIND YOU, ALWAYS.</div>
+    </div>
     <div class="search-wrap">
-      <input id="search" type="search" placeholder="What are you looking for tonight?" autocomplete="off">
+      <input id="search" type="search" placeholder="Search your library..." autocomplete="off">
       <span>⌕</span>
     </div>
     <div class="filters">
@@ -630,6 +718,15 @@ function morpheusWalk(){
 setTimeout(morpheusWalk,9000);
 setInterval(()=>{if(Math.random()>.45)morpheusWalk()},45000);
 
+document.querySelectorAll('.side-nav button[data-wing]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    activeWing=btn.dataset.wing;
+    document.querySelectorAll('.side-nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderWings();render();
+  });
+});
+document.querySelector('.side-nav button[data-wing="all"]')?.classList.add('active');
 renderWings();
 render();
 </script>
