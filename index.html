@@ -47,11 +47,10 @@ linear-gradient(to bottom,transparent 0 42%,rgba(13,11,9,.30) 62%,rgba(13,11,9,.
 .nav-actions{display:flex;gap:10px;align-items:center}
 button,.btn{font:inherit}
 .icon-btn{border:1px solid rgba(198,161,91,.35);background:#1a140f;color:var(--ink);border-radius:999px;padding:9px 13px;cursor:pointer}
-.hero{min-height:78vh;display:grid;place-items:center;text-align:center;padding:80px 20px 40px;position:relative;
-background:
-linear-gradient(to bottom,rgba(8,9,12,.22) 0%,rgba(8,9,12,.30) 48%,rgba(13,11,9,.92) 100%),
-url('assets/midnight-library-bg.webp') center 22%/cover no-repeat;
-border-bottom:1px solid rgba(198,161,91,.18)}
+.hero{min-height:78vh;display:grid;place-items:center;text-align:center;padding:80px 20px 40px;position:relative;overflow:hidden;border-bottom:1px solid rgba(198,161,91,.18)}
+.hero-scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 26%;z-index:0;filter:none;opacity:1}
+.hero:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(5,6,8,.04) 0%,rgba(5,6,8,.08) 50%,rgba(13,11,9,.55) 100%);pointer-events:none}
+.hero>.arch{position:relative;z-index:2}
 .arch{width:min(980px,92vw);padding:80px 28px 58px;border:1px solid rgba(198,161,91,.34);border-radius:48% 48% 18px 18px / 90px 90px 18px 18px;
 background:linear-gradient(rgba(12,10,9,.46),rgba(12,10,9,.66));
 backdrop-filter:blur(2px);
@@ -166,7 +165,7 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
   </div>
 </header>
 
-<section class="hero">
+<section class="hero"><img class="hero-scene" src="./assets/midnight-library-bg.webp?v=3" alt="">
   <div class="arch">
     <div class="candle left"><i class="flame"></i></div>
     <div class="candle right"><i class="flame"></i></div>
