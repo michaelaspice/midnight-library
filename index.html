@@ -17,23 +17,25 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-html{background:#0d0b09}
-body{margin:0;background:transparent;
+body{margin:0;background:
+radial-gradient(circle at 50% -20%,rgba(198,161,91,.16),transparent 38%),
+linear-gradient(#17120e,#0d0b09 60%);
 color:var(--ink);font-family:"DM Sans",sans-serif;min-height:100vh;overflow-x:hidden}
-body > *:not(.scene-bg){position:relative;z-index:1}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;z-index:2;background-image:
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:
 radial-gradient(circle at 20% 20%,#fff 0 1px,transparent 1.5px),
 radial-gradient(circle at 72% 36%,#fff 0 1px,transparent 1.5px),
 radial-gradient(circle at 44% 74%,#fff 0 1px,transparent 1.5px);
 background-size:170px 170px,220px 220px,260px 260px;animation:dust 18s linear infinite}
 @keyframes dust{to{transform:translateY(-60px)}}
-.scene-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:
-linear-gradient(to bottom,rgba(6,7,10,.18) 0%,rgba(6,7,10,.36) 32%,rgba(13,11,9,.82) 72%,#0d0b09 100%),
-url('assets/midnight-library-bg.webp') center top/cover no-repeat;filter:saturate(.9) brightness(.88)}
+.scene-bg{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
 .scene-bg:before{content:"";position:absolute;inset:0;background:
-radial-gradient(circle at 68% 17%,rgba(210,225,255,.10),transparent 16%),
-linear-gradient(to bottom,transparent 0 42%,rgba(13,11,9,.30) 62%,rgba(13,11,9,.88) 100%)}
-.castle,.castle-silhouette,.castle-glow{display:none}
+radial-gradient(circle at 72% 18%,rgba(230,237,255,.16),transparent 16%),
+linear-gradient(to bottom,rgba(18,26,42,.8) 0%,rgba(18,20,24,.25) 42%,rgba(12,9,7,.82) 100%)}
+.castle{position:absolute;right:2vw;top:4vh;width:min(720px,58vw);height:360px;opacity:.42;filter:drop-shadow(0 18px 30px #0008)}
+.castle-silhouette{position:absolute;inset:0;background:linear-gradient(to bottom,#111b2a 0%,#080d15 72%);clip-path:polygon(2% 100%,4% 78%,8% 78%,9% 48%,11% 38%,13% 48%,14% 75%,19% 75%,20% 58%,22% 58%,23% 28%,25% 15%,27% 28%,28% 61%,33% 61%,34% 46%,36% 46%,37% 18%,39% 3%,41% 18%,42% 55%,47% 55%,48% 69%,52% 69%,53% 42%,55% 31%,57% 42%,58% 68%,63% 68%,64% 51%,66% 51%,67% 23%,69% 9%,71% 23%,72% 61%,77% 61%,78% 74%,82% 74%,83% 49%,85% 38%,87% 49%,88% 76%,93% 76%,95% 64%,97% 64%,98% 100%)}
+.castle-silhouette:before{content:"";position:absolute;left:5%;right:3%;bottom:12%;height:32%;background:repeating-linear-gradient(90deg,transparent 0 24px,rgba(232,187,92,.55) 25px 28px,transparent 29px 48px);mask-image:linear-gradient(to bottom,transparent,#000 30%,#000);opacity:.5}
+.castle-silhouette:after{content:"";position:absolute;left:12%;right:7%;bottom:0;height:22%;background:linear-gradient(165deg,transparent 0 8%,#080d15 8% 18%,transparent 18% 23%,#080d15 23% 35%,transparent 35% 40%,#080d15 40% 100%)}
+.castle-glow{position:absolute;inset:10% 4% 12%;background:radial-gradient(ellipse at 58% 55%,rgba(255,195,95,.13),transparent 45%);filter:blur(12px)}
 .mist{position:absolute;left:-10%;right:-10%;height:150px;background:radial-gradient(ellipse at center,rgba(220,228,235,.15),transparent 68%);filter:blur(18px);animation:mistmove 20s ease-in-out infinite alternate}
 .mist.m1{top:22%}.mist.m2{top:48%;animation-duration:28s;opacity:.7}.mist.m3{bottom:5%;animation-duration:34s;opacity:.5}
 @keyframes mistmove{to{transform:translateX(8vw)}}
@@ -47,14 +49,11 @@ linear-gradient(to bottom,transparent 0 42%,rgba(13,11,9,.30) 62%,rgba(13,11,9,.
 .nav-actions{display:flex;gap:10px;align-items:center}
 button,.btn{font:inherit}
 .icon-btn{border:1px solid rgba(198,161,91,.35);background:#1a140f;color:var(--ink);border-radius:999px;padding:9px 13px;cursor:pointer}
-.hero{min-height:78vh;display:grid;place-items:center;text-align:center;padding:80px 20px 40px;position:relative;overflow:hidden;border-bottom:1px solid rgba(198,161,91,.18)}
-.hero-scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 26%;z-index:0;filter:none;opacity:1}
-.hero:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(5,6,8,.04) 0%,rgba(5,6,8,.08) 50%,rgba(13,11,9,.55) 100%);pointer-events:none}
-.hero>.arch{position:relative;z-index:2}
-.arch{width:min(980px,92vw);padding:80px 28px 58px;border:1px solid rgba(198,161,91,.34);border-radius:48% 48% 18px 18px / 90px 90px 18px 18px;
-background:linear-gradient(rgba(12,10,9,.46),rgba(12,10,9,.66));
-backdrop-filter:blur(2px);
-box-shadow:0 30px 80px #0009,inset 0 0 70px #0005}
+.hero{min-height:72vh;display:grid;place-items:center;text-align:center;padding:80px 20px 40px;position:relative}
+.arch{width:min(980px,92vw);padding:80px 28px 58px;border:1px solid rgba(198,161,91,.28);border-radius:48% 48% 18px 18px / 90px 90px 18px 18px;background:
+linear-gradient(rgba(17,13,10,.58),rgba(17,13,10,.88)),
+repeating-linear-gradient(90deg,#3b281d 0 70px,#21150f 70px 74px);
+box-shadow:0 30px 80px #0008,inset 0 0 80px #0008}
 .kicker{letter-spacing:.3em;font-size:11px;color:var(--gold2);text-transform:uppercase}
 h1,h2,h3{font-family:"Cormorant Garamond",serif;margin:0}
 h1{font-size:clamp(52px,8vw,108px);line-height:.88;font-weight:600}
@@ -146,78 +145,20 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 
-/* === Midnight Library cinematic dashboard === */
-:root{--sidebar:230px}
-body{background:#090806!important}
-.side-nav{position:fixed;inset:0 auto 0 0;width:var(--sidebar);z-index:40;padding:28px 16px;background:
-linear-gradient(180deg,rgba(16,11,8,.97),rgba(11,8,6,.96));
-border-right:1px solid rgba(216,165,91,.22);box-shadow:22px 0 70px #0008;display:flex;flex-direction:column;gap:6px}
-.side-logo{font-size:34px;color:#ffd899;text-shadow:0 0 18px #ff9b47;margin:0 0 20px 12px}
-.side-nav button{border:0;background:transparent;color:#dbcbb5;padding:11px 13px;border-radius:11px;text-align:left;font:500 14px "DM Sans",sans-serif;cursor:pointer;display:flex;gap:12px;align-items:center}
-.side-nav button:hover,.side-nav button.active{background:linear-gradient(90deg,rgba(155,88,45,.55),rgba(73,38,20,.28));color:#fff4db;box-shadow:inset 0 0 0 1px rgba(231,172,97,.13),0 0 24px #9d4f1b25}
-.side-quote{margin-top:auto;padding:22px 15px 36px;color:#e2c9a7;font:italic 20px/1.45 "Cormorant Garamond",serif}
-.side-quote small{display:block;margin-top:12px;text-align:right;font-size:16px}
-.topbar{left:var(--sidebar);padding:14px 3vw!important;background:transparent!important;border:0!important;backdrop-filter:none!important;justify-content:flex-end!important}
-.topbar .brand{display:none}
-.nav-actions{background:rgba(14,11,9,.88);border:1px solid rgba(213,161,87,.3);padding:5px 7px;border-radius:18px;box-shadow:0 14px 35px #0008}
-.nav-actions .icon-btn{padding:8px 12px;border:0;background:transparent}
-.nav-actions .icon-btn:hover{background:#2b1d13}
-.hero{margin-left:var(--sidebar);min-height:490px!important;height:54vh;max-height:660px;padding:38px 3vw 15px!important;align-items:center!important}
-.hero-scene{display:none!important}
-.hero:before{content:"";position:absolute;inset:0;background:
-radial-gradient(ellipse at 67% 8%,rgba(84,128,188,.28),transparent 27%),
-radial-gradient(ellipse at 44% 28%,rgba(250,151,65,.11),transparent 20%),
-linear-gradient(180deg,#101724 0%,#10141b 30%,#100c08 100%);z-index:0}
-.hero:after{background:
-radial-gradient(circle at 67% 13%,rgba(239,244,255,.28) 0 3px,transparent 4px),
-radial-gradient(circle at 75% 21%,rgba(255,192,110,.9) 0 1px,transparent 3px),
-radial-gradient(circle at 48% 27%,rgba(255,177,98,.8) 0 1px,transparent 3px),
-linear-gradient(180deg,transparent 0 64%,rgba(9,7,5,.95) 100%)!important;background-size:auto,240px 180px,190px 150px,auto}
-.arch{width:min(980px,88vw)!important;padding:20px 26px 30px!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
-.arch>.candle,.stats{display:none!important}
-.title-wrap{position:relative;display:inline-block;padding:12px 34px}
-.title-wrap h1{font-size:clamp(58px,6.5vw,96px)!important;line-height:.92!important;letter-spacing:-.025em}
-.title-wrap h1 small{display:block;font-size:.38em;line-height:.9;margin-left:-64%;color:#f2d8b4;font-weight:600}
+.title-wrap{position:relative;display:inline-block;padding:6px 24px 10px}
+.title-wrap h1{font-size:clamp(52px,8vw,108px);line-height:.88;font-weight:600;white-space:nowrap}
 .title-wrap h1 span{
-display:inline-block;background:linear-gradient(90deg,#ffe7bb 0%,#ffc67a 18%,#ff86cb 38%,#fff0c8 55%,#f5a7d7 72%,#ffd28e 88%,#fff0ce 100%);
-background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+display:inline-block;
+background:linear-gradient(90deg,#ffe7bb 0%,#ffc67a 18%,#ff86cb 38%,#fff0c8 55%,#f5a7d7 72%,#ffd28e 88%,#fff0ce 100%);
+background-size:220% 100%;
+-webkit-background-clip:text;background-clip:text;color:transparent;
 filter:drop-shadow(0 0 7px #ffbf7d) drop-shadow(0 0 18px #f87bb655);
 animation:titleShimmer 6s linear infinite}
 @keyframes titleShimmer{to{background-position:220% 0}}
-.hero-tagline{margin-top:14px;color:#ead4b8;font-size:12px;letter-spacing:.46em;text-transform:uppercase;text-shadow:0 1px 6px #000}
 .spark{position:absolute;color:#fff1c8;text-shadow:0 0 7px #fff,0 0 16px #ffb05b,0 0 24px #ff70c2;animation:twinkle 1.8s ease-in-out infinite alternate}
-.s1{left:3%;top:22%;font-size:20px}.s2{right:4%;top:11%;font-size:15px;animation-delay:.4s}.s3{right:11%;bottom:19%;font-size:18px;animation-delay:.9s}.s4{left:17%;bottom:5%;font-size:12px;animation-delay:1.2s}
+.s1{left:0;top:20%;font-size:20px}.s2{right:2%;top:5%;font-size:15px;animation-delay:.4s}.s3{right:9%;bottom:6%;font-size:18px;animation-delay:.9s}.s4{left:14%;bottom:0;font-size:12px;animation-delay:1.2s}
 @keyframes twinkle{0%{opacity:.2;transform:scale(.65) rotate(0)}100%{opacity:1;transform:scale(1.3) rotate(25deg)}}
-.search-wrap{margin:26px auto 13px!important;max-width:700px!important}
-.search-wrap input{height:52px;background:rgba(9,12,18,.9)!important;border:1px solid rgba(222,171,103,.55)!important;box-shadow:0 0 0 1px #0009,inset 0 0 25px #0008,0 0 24px #d17d3830}
-.filters{gap:6px!important}
-.filter-btn{font-size:12px!important;padding:8px 14px!important;background:rgba(13,13,14,.78)!important;border-color:#493a2b!important}
-.filter-btn.active{background:linear-gradient(#a85a2a,#713816)!important;color:#fff0d3!important;border-color:#e2a566!important;box-shadow:0 0 16px #d97536aa}
-.library{margin-left:var(--sidebar)!important;padding:8px 3vw 70px!important;max-width:none!important;background:
-linear-gradient(90deg,rgba(18,11,7,.97),rgba(11,8,7,.96) 72%,rgba(12,9,8,.98));
-min-height:50vh}
-.section-head{display:none!important}
-.wings{display:none!important}
-#collections{max-width:calc(100vw - var(--sidebar) - 60px);margin-top:0}
-.collection{margin:0 0 18px!important}
-.collection-title{margin:0 0 4px!important;border-top:1px solid rgba(207,147,76,.16);padding-top:9px}
-.collection-title h3{font-size:23px!important;color:#f0dcc1}
-.collection-title span{color:#c99a62!important}
-.collection .shelf{margin-top:0!important;min-height:190px!important;background:
-linear-gradient(180deg,#2a160d 0 5px,#130b07 5px calc(100% - 12px),#4a2816 calc(100% - 12px) calc(100% - 5px),#130b07 calc(100% - 5px));
-border:1px solid #3b2114!important;box-shadow:inset 0 12px 26px #000,0 10px 18px #0007!important;border-radius:3px!important}
-.collection .books{min-height:170px!important;padding:12px 14px 0!important;gap:8px!important}
-.book{height:154px!important;min-width:66px!important;max-width:88px!important;border-radius:4px 4px 1px 1px!important;box-shadow:inset -4px 0 8px #0006,0 4px 8px #0008!important}
-.book .spine-title{font-size:9px!important;letter-spacing:.04em!important;padding-top:12px!important}
-.card-grid,footer{display:none!important}
-.reader{justify-content:flex-end!important;padding:84px 24px 24px calc(var(--sidebar) + 24px)!important;background:rgba(0,0,0,.25)!important}
-.reader-card{width:min(520px,42vw)!important;height:min(76vh,780px)!important;border-radius:14px!important;background:#15110e!important;box-shadow:0 28px 90px #000d,0 0 0 1px rgba(218,163,91,.22)!important}
-.reader-head{padding:13px 14px!important}.reader-title strong{font-family:"Cormorant Garamond",serif;font-size:20px}
-.reader-actions .icon-btn{font-size:11px;padding:7px 9px}
-.morpheus{z-index:32}
-@media(max-width:900px){
-:root{--sidebar:0px}.side-nav{display:none}.topbar{left:0}.hero,.library{margin-left:0!important}.hero{height:auto;min-height:520px!important}.reader{padding:65px 10px 10px!important}.reader-card{width:100%!important;height:85vh!important}.title-wrap h1 small{margin-left:0}.title-wrap h1{font-size:56px!important}
-}
+@media(max-width:700px){.title-wrap h1{white-space:normal}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -226,24 +167,12 @@ border:1px solid #3b2114!important;box-shadow:inset 0 12px 26px #000,0 10px 18px
 </head>
 <body>
 <div class="scene-bg" aria-hidden="true">
-  <div class="castle" aria-hidden="true"></div>
+  <div class="castle"><div class="castle-glow"></div><div class="castle-silhouette"></div></div>
   <div class="mist m1"></div><div class="mist m2"></div><div class="mist m3"></div>
   <div class="floating-candles" id="floatingCandles"></div>
 </div>
-<aside class="side-nav">
-  <div class="side-logo">📖</div>
-  <button data-wing="all">🎁 <span>All Books</span></button>
-  <button data-wing="Fantasy">🔥 <span>Fantasy</span></button>
-  <button data-wing="Classics & Fantasy">📖 <span>Classics</span></button>
-  <button data-wing="Dystopian">✦ <span>Sci‑Fi</span></button>
-  <button data-wing="Romance">♥ <span>Romance</span></button>
-  <button data-wing="Mind & Self">♨ <span>Mind & Self</span></button>
-  <button data-wing="Mystery">◉ <span>Mystery</span></button>
-  <button data-wing="Supernatural">☾ <span>Supernatural</span></button>
-  <div class="side-quote">“A room without books is like a body without a soul.”<small>— Cicero</small></div>
-</aside>
 <header class="topbar">
-  <div class="brand">📚 Library</div>
+  <div class="brand">✦ The Midnight Library</div>
   <div class="nav-actions">
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
 <button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
@@ -251,17 +180,18 @@ border:1px solid #3b2114!important;box-shadow:inset 0 12px 26px #000,0 10px 18px
   </div>
 </header>
 
-<section class="hero"><img class="hero-scene" src="./assets/midnight-library-bg.webp?v=3" alt="">
+<section class="hero">
   <div class="arch">
     <div class="candle left"><i class="flame"></i></div>
     <div class="candle right"><i class="flame"></i></div>
+    <div class="kicker">Mihaela's private collection</div>
     <div class="title-wrap">
       <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><span class="spark s4">✧</span>
-      <h1><small>The</small><span>The Midnight Library</span></h1>
-      <div class="hero-tagline">GOOD BOOKS FIND YOU, ALWAYS.</div>
+      <h1><span>The Midnight Library</span></h1>
     </div>
+    <p>A quiet place for books worth keeping. Search the shelves, mark what you've read, save favourites, and return to the page where you left off.</p>
     <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search your library..." autocomplete="off">
+      <input id="search" type="search" placeholder="What are you looking for tonight?" autocomplete="off">
       <span>⌕</span>
     </div>
     <div class="filters">
@@ -718,15 +648,6 @@ function morpheusWalk(){
 setTimeout(morpheusWalk,9000);
 setInterval(()=>{if(Math.random()>.45)morpheusWalk()},45000);
 
-document.querySelectorAll('.side-nav button[data-wing]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    activeWing=btn.dataset.wing;
-    document.querySelectorAll('.side-nav button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    renderWings();render();
-  });
-});
-document.querySelector('.side-nav button[data-wing="all"]')?.classList.add('active');
 renderWings();
 render();
 </script>
