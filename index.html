@@ -128,6 +128,7 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -350,6 +351,10 @@ function destroyEpub(){
 async function loadEpubArrayBuffer(buf){
   if(!activeBook || !buf) return;
   destroyEpub();
+  if(typeof ePub!=='function'){
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">⚠️</div><h3>Reader failed to load</h3><p>The EPUB reader library did not initialize. Refresh the page and try again.</p></div></div>';
+    return;
+  }
   readerBody.innerHTML=
     '<div class="epub-shell">'+
       '<div class="epub-toolbar">'+
@@ -361,8 +366,15 @@ async function loadEpubArrayBuffer(buf){
       '<div class="epub-nav"><button class="reader-btn" id="epubPrev">← Previous</button><button class="reader-btn" id="epubNext">Next →</button></div>'+
     '</div>';
 
-  epubBook=ePub(buf);
-  epubRendition=epubBook.renderTo('epubViewer',{width:'100%',height:'100%',spread:'auto',flow:'paginated'});
+  try{
+    epubBook=ePub(buf);
+    await epubBook.ready;
+    epubRendition=epubBook.renderTo('epubViewer',{width:'100%',height:'100%',spread:'auto',flow:'paginated'});
+  }catch(err){
+    console.error('EPUB open error',err);
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📕</div><h3>Could not open this EPUB</h3><p>'+String(err && err.message ? err.message : err)+'</p><p><small>The file is safely stored in the private vault. This is a reader-format issue, not an upload problem.</small></p></div></div>';
+    return;
+  }
   epubRendition.themes.register('paper',{body:{background:'#efe6cf',color:'#2b2218','font-family':'Georgia, serif','line-height':'1.6'}});
   epubRendition.themes.register('night',{body:{background:'#12100e',color:'#e8dfcf','font-family':'Georgia, serif','line-height':'1.65'}});
   epubRendition.themes.register('white',{body:{background:'#ffffff',color:'#1d1d1d','font-family':'Georgia, serif','line-height':'1.6'}});
@@ -370,7 +382,16 @@ async function loadEpubArrayBuffer(buf){
   epubRendition.themes.fontSize('100%');
 
   const savedCfi=(stateFor(activeBook).cfi)||null;
-  await epubRendition.display(savedCfi||undefined);
+  try{
+    await epubRendition.display(savedCfi||undefined);
+  }catch(err){
+    console.error('EPUB display error',err);
+    try{ await epubRendition.display(); }
+    catch(err2){
+      readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📕</div><h3>Reader could not render this book</h3><p>'+String(err2 && err2.message ? err2.message : err2)+'</p></div></div>';
+      return;
+    }
+  }
   let fontPct=100;
   document.getElementById('fontDown').onclick=()=>{fontPct=Math.max(70,fontPct-10);epubRendition.themes.fontSize(fontPct+'%')};
   document.getElementById('fontUp').onclick=()=>{fontPct=Math.min(180,fontPct+10);epubRendition.themes.fontSize(fontPct+'%')};
