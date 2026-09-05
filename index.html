@@ -106,6 +106,11 @@ box-shadow:inset 0 0 60px #0009,0 20px 30px #0006}
 .auth-card input{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #6e5738;background:#0f0c09;color:var(--ink);margin:12px 0}
 .auth-note{font-size:12px;color:var(--muted)}
 .upload-status{margin-top:12px;font-size:13px;color:var(--gold2)}
+.librarian{position:fixed;inset:0;background:#090705f2;z-index:85;display:none;place-items:center;padding:20px}
+.librarian.open{display:grid}.librarian-card{width:min(820px,96vw);max-height:88vh;overflow:auto;background:#17120e;border:1px solid rgba(198,161,91,.35);border-radius:18px;padding:28px;box-shadow:0 30px 90px #000}
+.import-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.match-list{display:grid;gap:8px;margin-top:16px}
+.match-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 12px;border:1px solid #493925;border-radius:9px;background:#100d0a}.match-row small{color:var(--muted)}.match-ok{color:#b9d39a}.match-warn{color:#e2b36b}.match-bad{color:#d9897f}
+.import-progress{height:8px;background:#0d0a08;border-radius:99px;overflow:hidden;margin:14px 0}.import-progress>div{height:100%;width:0;background:var(--gold);transition:width .2s}
 .placeholder{display:grid;place-items:center;text-align:center;padding:30px}
 .placeholder-inner{max-width:520px}
 .placeholder h3{font-size:38px;margin-bottom:10px}
@@ -131,6 +136,7 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
   <div class="brand">✦ The Midnight Library</div>
   <div class="nav-actions">
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
+<button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
 <button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
   </div>
 </header>
@@ -189,6 +195,15 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
     <button class="icon-btn" id="closeAuth">Cancel</button>
     <div class="upload-status" id="authStatus"></div>
   </div>
+</div>
+<div class="librarian" id="librarian">
+ <div class="librarian-card">
+  <div class="kicker">Private collection</div><h3 style="font-size:36px">Librarian's Desk</h3>
+  <p style="color:var(--muted);line-height:1.55">Choose many EPUBs at once. Midnight Library matches filenames to the catalogue, then stores matched copies in your private vault.</p>
+  <div class="import-actions"><button class="icon-btn" id="chooseBatch">Choose EPUBs</button><button class="icon-btn" id="importBatch" disabled>Import matched books</button><button class="icon-btn" id="closeLibrarian">Close</button></div>
+  <input class="local-upload" id="batchInput" type="file" accept=".epub,application/epub+zip" multiple>
+  <div id="batchSummary" class="upload-status"></div><div class="import-progress"><div id="importBar"></div></div><div id="matchList" class="match-list"></div>
+ </div>
 </div>
 <div class="reader" id="reader" aria-hidden="true">
   <div class="reader-card">
@@ -407,7 +422,68 @@ document.getElementById('sendMagicLink').onclick=async()=>{
 };
 function updateAuthButton(){
   document.getElementById('authBtn').textContent=sessionUser?'🔓 Leave library':'🔐 Enter library';
+  document.getElementById('librarianBtn').style.display=(sessionUser&&ownerAccess)?'inline-flex':'none';
 }
+
+let batchMatches=[];
+const normalizeName=s=>s.toLowerCase()
+ .replace(/39_s/g,'s').replace(/[_-]+/g,' ')
+ .replace(/[^a-z0-9 ]/g,' ').replace(/\b(epub|pdf|book|the|a|an|and|of|to|with|in|on|j k rowling|j r r tolkien|julia quinn|maurice leblanc)\b/g,' ')
+ .replace(/\s+/g,' ').trim();
+
+function scoreFileToBook(file,b){
+  const f=normalizeName(file.name.replace(/\.epub$/i,''));
+  const t=normalizeName(b.title);
+  if(!f||!t)return 0;
+  if(f.includes(t)||t.includes(f))return 100;
+  const ft=new Set(f.split(' ')), tt=t.split(' ');
+  const hit=tt.filter(x=>ft.has(x)).length;
+  return Math.round(100*hit/Math.max(tt.length,1));
+}
+function matchBatch(files){
+  const used=new Set(); batchMatches=[];
+  [...files].forEach(file=>{
+    let best=null,bestScore=0;
+    books.filter(b=>(b.format||'').toUpperCase()==='EPUB').forEach(b=>{
+      if(used.has(b.id))return;
+      const s=scoreFileToBook(file,b);
+      if(s>bestScore){best=b;bestScore=s}
+    });
+    if(best&&bestScore>=45){used.add(best.id);batchMatches.push({file,book:best,score:bestScore,status:'ready'})}
+    else batchMatches.push({file,book:null,score:bestScore,status:'unmatched'});
+  });
+  renderBatch();
+}
+function renderBatch(){
+  const matched=batchMatches.filter(x=>x.book);
+  document.getElementById('batchSummary').textContent=batchMatches.length?matched.length+' of '+batchMatches.length+' files matched. Review before importing.':'';
+  document.getElementById('importBatch').disabled=!matched.length;
+  document.getElementById('matchList').innerHTML=batchMatches.map(x=>{
+    const cls=x.status==='done'?'match-ok':x.book?(x.score>=70?'match-ok':'match-warn'):'match-bad';
+    const right=x.status==='done'?'✓ Imported':x.book?(x.score+'% match'):'Needs matching';
+    return '<div class="match-row"><div><b>'+x.file.name+'</b><br><small>'+(x.book?'→ '+x.book.title+' — '+x.book.author:'No confident catalogue match')+'</small></div><div class="'+cls+'">'+right+'</div></div>';
+  }).join('');
+}
+document.getElementById('librarianBtn').onclick=()=>document.getElementById('librarian').classList.add('open');
+document.getElementById('closeLibrarian').onclick=()=>document.getElementById('librarian').classList.remove('open');
+document.getElementById('chooseBatch').onclick=()=>document.getElementById('batchInput').click();
+document.getElementById('batchInput').onchange=e=>matchBatch(e.target.files);
+document.getElementById('importBatch').onclick=async()=>{
+  const todo=batchMatches.filter(x=>x.book&&x.status!=='done');
+  if(!todo.length)return;
+  const btn=document.getElementById('importBatch');btn.disabled=true;
+  for(let i=0;i<todo.length;i++){
+    const x=todo[i];
+    document.getElementById('batchSummary').textContent='Importing '+(i+1)+' of '+todo.length+': '+x.book.title;
+    const {error}=await supa.storage.from('midnight-books').upload(x.book.storagePath,x.file,{contentType:'application/epub+zip',upsert:true});
+    x.status=error?'error':'done'; if(error)x.error=error.message;
+    document.getElementById('importBar').style.width=Math.round((i+1)/todo.length*100)+'%';
+    renderBatch();
+  }
+  const done=batchMatches.filter(x=>x.status==='done').length;
+  document.getElementById('batchSummary').textContent='Import complete — '+done+' private books added to the vault.';
+  btn.disabled=false;
+};
 async function refreshAuth(){
   const {data:{session}}=await supa.auth.getSession();
   sessionUser=session?.user||null; ownerAccess=false;
