@@ -20,13 +20,14 @@ html{scroll-behavior:smooth}
 html{background:#0d0b09}
 body{margin:0;background:transparent;
 color:var(--ink);font-family:"DM Sans",sans-serif;min-height:100vh;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:
+body > *:not(.scene-bg){position:relative;z-index:1}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;z-index:2;background-image:
 radial-gradient(circle at 20% 20%,#fff 0 1px,transparent 1.5px),
 radial-gradient(circle at 72% 36%,#fff 0 1px,transparent 1.5px),
 radial-gradient(circle at 44% 74%,#fff 0 1px,transparent 1.5px);
 background-size:170px 170px,220px 220px,260px 260px;animation:dust 18s linear infinite}
 @keyframes dust{to{transform:translateY(-60px)}}
-.scene-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:
+.scene-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:
 linear-gradient(to bottom,rgba(6,7,10,.18) 0%,rgba(6,7,10,.36) 32%,rgba(13,11,9,.82) 72%,#0d0b09 100%),
 url('assets/midnight-library-bg.webp') center top/cover no-repeat;filter:saturate(.9) brightness(.88)}
 .scene-bg:before{content:"";position:absolute;inset:0;background:
