@@ -74,6 +74,10 @@ box-shadow:inset 0 0 60px #0009,0 20px 30px #0006}
 .charcoal{background:linear-gradient(90deg,#282727,#4b4846,#1c1b1a)}
 .plum{background:linear-gradient(90deg,#4c2a45,#75486f,#382033)}
 .empty{padding:50px 20px;color:var(--muted);text-align:center;width:100%}
+.collection{margin:0 0 64px}.collection-title{display:flex;align-items:center;gap:12px;margin:0 0 12px}.collection-title h3{font-size:30px}.collection-title span{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.collection .shelf{margin-top:10px;min-height:285px}.collection .books{min-height:220px}
+.wings{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 30px}.wing-btn{padding:9px 13px;border:1px solid #5d4931;background:#14100c;color:var(--muted);border-radius:7px;cursor:pointer}.wing-btn.active{color:#1a120a;background:var(--gold)}
+.private-mark{position:absolute;top:27px;left:50%;transform:translateX(-50%);font-size:9px;color:#f2d99c;opacity:.7}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
 .info-card{background:#17120e;border:1px solid rgba(198,161,91,.23);padding:20px;border-radius:16px}
 .info-card h3{font-size:26px}.info-card p{color:var(--muted);line-height:1.55}
@@ -140,11 +144,11 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 
 <main class="library">
   <div class="section-head">
-    <div><div class="kicker">The collection</div><h2>Books on the shelves</h2></div>
+    <div><div class="kicker">The collection</div><h2>Wander the library</h2></div>
     <p id="resultCount"></p>
   </div>
-
-  <section class="shelf"><div class="books" id="shelf"></div></section>
+  <div class="wings" id="wings"></div>
+  <div id="collections"></div>
 
   <div class="card-grid">
     <article class="info-card"><h3>Currently Reading</h3><p id="currentReading">Nothing selected yet. A scandal.</p></article>
@@ -174,11 +178,12 @@ footer{text-align:center;padding:30px;color:#8f816e;border-top:1px solid rgba(19
 <script src="catalog.js"></script>
 <script>
 const books = window.MIDNIGHT_BOOKS || [];
-const shelf = document.getElementById('shelf');
+const collections = document.getElementById('collections');
+const wings = document.getElementById('wings');
 const search = document.getElementById('search');
 const reader = document.getElementById('reader');
 const readerBody = document.getElementById('readerBody');
-let activeFilter='all', activeBook=null;
+let activeFilter='all', activeWing='all', activeBook=null;
 
 const saved = JSON.parse(localStorage.getItem('midnight-library') || '{}');
 function stateFor(b){ return saved[b.id] || {}; }
@@ -190,7 +195,8 @@ function isRestricted(b){ return ['Gothic','Horror','Crime','Thriller'].includes
 function filtered(){
   const q=search.value.trim().toLowerCase();
   return books.filter(b=>{
-    const text=(b.title+' '+b.author+' '+b.genre).toLowerCase();
+    const text=(b.title+' '+b.author+' '+b.genre+' '+b.collection+' '+b.wing).toLowerCase();
+    if(activeWing!=='all' && b.wing!==activeWing) return false;
     if(q && !text.includes(q)) return false;
     const status=effective(b,'status');
     if(activeFilter==='all') return true;
@@ -202,18 +208,33 @@ function filtered(){
 
 function render(){
   const list=filtered();
-  shelf.innerHTML='';
-  if(!list.length){ shelf.innerHTML='<div class="empty">No books are hiding on this shelf.</div>'; }
-  list.forEach(b=>{
-    const el=document.createElement('article');
-    el.className='book '+(b.spine||'brown')+' '+(b.size||'medium');
-    el.title=b.title+' — '+b.author;
-    el.innerHTML='<div class="spine-title">'+b.title+'</div><div class="author">'+b.author+'</div>';
-    el.addEventListener('click',()=>openBook(b));
-    shelf.appendChild(el);
+  collections.innerHTML='';
+  const groups=[...new Set(list.map(b=>b.collection))];
+  if(!list.length){ collections.innerHTML='<div class="empty">No books are hiding in this wing.</div>'; }
+  groups.forEach(name=>{
+    const group=list.filter(b=>b.collection===name).sort((a,b)=>a.order-b.order);
+    const section=document.createElement('section');section.className='collection';
+    section.innerHTML='<div class="collection-title"><h3>'+name+'</h3><span>'+group.length+' '+(group.length===1?'volume':'volumes')+'</span></div><div class="shelf"><div class="books"></div></div>';
+    const row=section.querySelector('.books');
+    group.forEach(b=>{
+      const el=document.createElement('article');
+      el.className='book '+(b.spine||'brown')+' '+(b.size||'medium');
+      el.title=b.title+' — '+b.author;
+      el.innerHTML=(b.private?'<div class="private-mark">◆</div>':'')+'<div class="spine-title">'+b.title+'</div><div class="author">'+b.author+'</div>';
+      el.addEventListener('click',()=>openBook(b));row.appendChild(el);
+    });
+    collections.appendChild(section);
   });
-  document.getElementById('resultCount').textContent=list.length+' visible';
+  document.getElementById('resultCount').textContent=list.length+' of '+books.length+' volumes';
   updateStats();
+}
+function renderWings(){
+  const all=['all',...new Set(books.map(b=>b.wing))];
+  wings.innerHTML='';
+  all.forEach(w=>{
+    const btn=document.createElement('button');btn.className='wing-btn'+(w===activeWing?' active':'');
+    btn.textContent=w==='all'?'All wings':w;btn.onclick=()=>{activeWing=w;renderWings();render()};wings.appendChild(btn);
+  });
 }
 
 function updateStats(){
@@ -229,12 +250,12 @@ function openBook(b){
   activeBook=b;
   reader.classList.add('open'); reader.setAttribute('aria-hidden','false');
   document.getElementById('readerBook').textContent=b.title;
-  document.getElementById('readerAuthor').textContent=b.author+' · '+b.genre+' · '+b.year;
+  document.getElementById('readerAuthor').textContent=b.author+' · '+b.collection+' · '+b.format;
   syncReaderButtons();
   if(b.file){
     readerBody.innerHTML='<iframe title="'+b.title+'" src="'+b.file+'#view=FitH"></iframe>';
   }else{
-    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📖</div><h3>'+b.title+'</h3><p>This is a demo shelf entry. When its PDF is added to the <b>books</b> folder and the file path is set in <b>catalog.js</b>, the book will open right here inside the library.</p><p><small>'+ (b.note||'') +'</small></p></div></div>';
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📖</div><h3>'+b.title+'</h3><p>This volume is catalogued in the Midnight Library, but its reading file is kept private. The reader shell is ready; private storage and authenticated reading access are the next stage.</p><p><small>'+ (b.note||'') +'</small></p></div></div>';
   }
 }
 
@@ -273,6 +294,7 @@ function morpheusWalk(){
 setTimeout(morpheusWalk,9000);
 setInterval(()=>{if(Math.random()>.45)morpheusWalk()},45000);
 
+renderWings();
 render();
 </script>
 </body>
