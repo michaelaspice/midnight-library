@@ -866,6 +866,38 @@ body:after{
  .enchanted-branch-divider:after{left:0!important;right:auto!important;top:16px!important;width:130px!important}
 }
 
+
+/* Collection shelves: three-column bookcase layout */
+#collections{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:34px 26px;
+  align-items:start;
+}
+#collections .collection{
+  min-width:0;
+  margin:0;
+}
+#collections .collection-title h3{
+  font-size:clamp(22px,1.55vw,30px);
+}
+#collections .collection .shelf{
+  width:100%!important;
+  min-height:285px;
+  padding-left:16px!important;
+  padding-right:16px!important;
+}
+#collections .collection .books{
+  min-width:0;
+  overflow-x:auto;
+}
+@media(max-width:1200px){
+  #collections{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:760px){
+  #collections{grid-template-columns:1fr;gap:42px;}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
