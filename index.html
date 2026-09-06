@@ -898,6 +898,35 @@ body:after{
   #collections{grid-template-columns:1fr;gap:42px;}
 }
 
+
+/* Center the collection entrance heading */
+.library > .section-head:first-of-type{
+  text-align:center;
+  justify-content:center;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.library > .section-head:first-of-type .eyebrow{
+  text-align:center;
+}
+.library > .section-head:first-of-type h2{
+  text-align:center;
+}
+.library > .section-head:first-of-type:after{
+  content:"✦";
+  display:block;
+  width:150px;
+  margin:8px auto 12px;
+  color:var(--gold);
+  font-size:13px;
+  line-height:1;
+  background:linear-gradient(90deg,transparent,rgba(198,161,91,.55),transparent) center/100% 1px no-repeat;
+  text-shadow:0 0 10px rgba(198,161,91,.45);
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
