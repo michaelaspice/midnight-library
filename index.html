@@ -534,12 +534,69 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 .track-title{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 @media(max-width:560px){.track-controls{width:min(260px,92vw)}}
 
+
+/* Enchanted midnight-library atmosphere */
+body{
+  position:relative;
+  background:
+    radial-gradient(ellipse at 8% 18%,rgba(154,111,54,.075),transparent 28%),
+    radial-gradient(ellipse at 92% 36%,rgba(42,39,70,.13),transparent 34%),
+    radial-gradient(ellipse at 18% 72%,rgba(91,60,31,.07),transparent 30%),
+    radial-gradient(ellipse at 82% 88%,rgba(44,38,64,.10),transparent 32%),
+    linear-gradient(180deg,#090706 0%,#0b0908 48%,#070605 100%) !important;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;opacity:.72;
+  background-image:
+    radial-gradient(circle at 7% 11%,rgba(235,211,159,.65) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 18% 27%,rgba(185,154,98,.42) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 31% 8%,rgba(239,225,195,.48) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 46% 22%,rgba(185,154,98,.36) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 61% 7%,rgba(235,211,159,.55) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 74% 29%,rgba(185,154,98,.4) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 89% 12%,rgba(239,225,195,.52) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 95% 47%,rgba(185,154,98,.36) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 11% 54%,rgba(235,211,159,.42) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 24% 81%,rgba(185,154,98,.35) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 43% 68%,rgba(239,225,195,.42) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 57% 91%,rgba(185,154,98,.42) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 71% 63%,rgba(235,211,159,.48) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 86% 78%,rgba(185,154,98,.38) 0 1px,transparent 1.5px);
+  background-size:260px 260px,310px 310px,370px 370px,430px 430px,290px 290px,350px 350px,410px 410px,330px 330px,390px 390px,470px 470px,300px 300px,360px 360px,420px 420px,500px 500px;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.48),transparent 13%,transparent 87%,rgba(0,0,0,.48)),
+    radial-gradient(ellipse at 50% 42%,transparent 40%,rgba(0,0,0,.24) 100%);
+}
+.ambient-magic{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.magic-speck{position:absolute;width:2px;height:2px;border-radius:50%;background:#d7b96f;opacity:0;box-shadow:0 0 7px rgba(215,185,111,.6);animation:magicDrift linear infinite}
+.magic-speck:nth-child(1){left:6%;top:88%;animation-duration:18s;animation-delay:-4s}
+.magic-speck:nth-child(2){left:14%;top:65%;animation-duration:24s;animation-delay:-13s}
+.magic-speck:nth-child(3){left:27%;top:94%;animation-duration:21s;animation-delay:-7s}
+.magic-speck:nth-child(4){left:39%;top:74%;animation-duration:27s;animation-delay:-17s}
+.magic-speck:nth-child(5){left:55%;top:91%;animation-duration:20s;animation-delay:-2s}
+.magic-speck:nth-child(6){left:68%;top:69%;animation-duration:25s;animation-delay:-11s}
+.magic-speck:nth-child(7){left:81%;top:95%;animation-duration:23s;animation-delay:-19s}
+.magic-speck:nth-child(8){left:93%;top:77%;animation-duration:28s;animation-delay:-8s}
+@keyframes magicDrift{0%{transform:translate3d(0,40px,0) scale(.7);opacity:0}15%{opacity:.55}55%{transform:translate3d(14px,-28vh,0) scale(1);opacity:.32}100%{transform:translate3d(-8px,-58vh,0) scale(.6);opacity:0}}
+.library,.hero,.topbar,footer{position:relative;z-index:1}
+.collection{position:relative}
+.collection:before{
+  content:"";position:absolute;left:5%;right:5%;bottom:-12px;height:46px;pointer-events:none;z-index:-1;
+  background:radial-gradient(ellipse,rgba(176,125,57,.10),transparent 68%);filter:blur(10px)
+}
+@media(prefers-reduced-motion:reduce){.magic-speck{animation:none;display:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<div class="ambient-magic" aria-hidden="true"><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i><i class="magic-speck"></i></div>
 <div class="scene-bg" aria-hidden="true">
   <div class="castle"><div class="castle-glow"></div><div class="castle-silhouette"></div></div>
   <div class="mist m1"></div><div class="mist m2"></div><div class="mist m3"></div>
