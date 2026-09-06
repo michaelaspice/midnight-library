@@ -1057,6 +1057,45 @@ body:after{
   #collections .collection .book{z-index:2}
 }
 
+
+/* Gentle enchanted breeze through divider leaves */
+.enchanted-branch-divider .leaf{
+  transform-origin:18% 72%;
+  animation:leafBreeze 7.5s ease-in-out infinite;
+  will-change:transform;
+}
+.enchanted-branch-divider .l2{animation-delay:-1.1s;animation-duration:8.4s}
+.enchanted-branch-divider .l3{animation-delay:-2.7s;animation-duration:6.9s}
+.enchanted-branch-divider .l4{animation-delay:-4.2s;animation-duration:9.1s}
+.enchanted-branch-divider .l5{animation-delay:-1.9s;animation-duration:7.8s}
+.enchanted-branch-divider .l6{animation-delay:-5.1s;animation-duration:8.8s}
+.enchanted-branch-divider .l7{animation-delay:-3.5s;animation-duration:7.2s}
+.enchanted-branch-divider .l8{animation-delay:-6.2s;animation-duration:9.4s}
+
+@keyframes leafBreeze{
+  0%,100%{translate:0 0;rotate:0deg}
+  22%{translate:1px -1px;rotate:2deg}
+  48%{translate:3px 0;rotate:-3deg}
+  72%{translate:1px 1px;rotate:1.5deg}
+}
+
+.enchanted-branch-divider .twig{
+  animation:twigBreathe 10s ease-in-out infinite;
+  transform-origin:left center;
+}
+.enchanted-branch-divider .t2{animation-delay:-3s}
+.enchanted-branch-divider .t3{animation-delay:-5s}
+.enchanted-branch-divider .t4{animation-delay:-7s}
+@keyframes twigBreathe{
+  0%,100%{translate:0 0}
+  50%{translate:1px 0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .enchanted-branch-divider .leaf,
+  .enchanted-branch-divider .twig{animation:none!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
