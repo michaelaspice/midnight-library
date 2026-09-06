@@ -836,6 +836,36 @@ body:after{
   .collection .shelf{padding-left:42px!important;padding-right:42px!important}
 }
 
+
+/* Requested owl placement: perch at far-left end of the divider branch */
+.scenery-owl{
+  left:1.2%!important;
+  right:auto!important;
+  bottom:-49px!important;
+  width:205px!important;
+  height:252px!important;
+  z-index:12!important;
+}
+.enchanted-branch-divider:before{
+  left:-1.5%!important;
+  right:auto!important;
+  top:43px!important;
+  width:270px!important;
+  transform:rotate(3deg)!important;
+}
+.enchanted-branch-divider:after{
+  left:1%!important;
+  right:auto!important;
+  top:18px!important;
+  width:225px!important;
+  transform:rotate(4deg)!important;
+}
+@media(max-width:700px){
+ .scenery-owl{left:0!important;right:auto!important;bottom:-31px!important;width:125px!important;height:154px!important}
+ .enchanted-branch-divider:before{left:-2%!important;right:auto!important;top:31px!important;width:160px!important}
+ .enchanted-branch-divider:after{left:0!important;right:auto!important;top:16px!important;width:130px!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
