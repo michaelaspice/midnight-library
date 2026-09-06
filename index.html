@@ -758,6 +758,48 @@ body:after{
   .leaf{width:22px;height:10px}
 }
 
+
+/* Owl perch correction: make the owl part of the branch scenery */
+.scenery-owl{
+  right:5.2%!important;
+  bottom:-58px!important;
+  width:205px!important;
+  height:252px!important;
+  z-index:12!important;
+}
+.enchanted-branch-divider{z-index:11!important}
+.enchanted-branch-divider:before{
+  content:"";
+  position:absolute;
+  right:2.5%;
+  top:42px;
+  width:245px;
+  height:27px;
+  border-radius:70% 35% 65% 40%;
+  background:linear-gradient(180deg,#765334 0%,#49301e 42%,#24160e 72%,#120b07 100%);
+  transform:rotate(-4deg);
+  box-shadow:inset 0 3px rgba(200,154,94,.16),0 8px 9px rgba(0,0,0,.45);
+  z-index:9;
+}
+.enchanted-branch-divider:after{
+  content:"❧  ❧  ❧";
+  position:absolute;
+  right:3.5%;
+  top:19px;
+  width:215px;
+  color:#46583a;
+  font:38px/1 Georgia,serif;
+  letter-spacing:24px;
+  transform:rotate(-5deg);
+  text-shadow:0 2px 4px #0008;
+  z-index:10;
+}
+@media(max-width:700px){
+ .scenery-owl{right:2%!important;bottom:-35px!important;width:125px!important;height:154px!important}
+ .enchanted-branch-divider:before{right:0;top:31px;width:145px;height:18px}
+ .enchanted-branch-divider:after{right:0;top:17px;width:125px;font-size:24px;letter-spacing:10px}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
