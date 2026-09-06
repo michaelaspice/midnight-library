@@ -479,8 +479,66 @@ animation:titleShimmer 6s linear infinite}
   border-left-color:#0b0908 !important;
   border-right-color:#0b0908 !important;
 }
+
+#soundBtn.sound-on{border-color:var(--gold);color:#f4dfad;box-shadow:0 0 18px rgba(198,161,91,.16)}
+footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
+const libraryMusic=document.getElementById('libraryMusic');
+const soundBtn=document.getElementById('soundBtn');
+let musicStarted=false;
+libraryMusic.volume=0;
+
+function setSoundButton(){
+  const on=musicStarted && !libraryMusic.paused && !libraryMusic.muted;
+  soundBtn.classList.toggle('sound-on',on);
+  soundBtn.textContent=on?'♫ Sound on':'♪ Sound';
+}
+
+async function fadeMusicIn(){
+  if(localStorage.getItem('midnight-music-muted')==='1') return;
+  try{
+    libraryMusic.muted=false;
+    libraryMusic.volume=0;
+    await libraryMusic.play();
+    musicStarted=true;
+    setSoundButton();
+    let v=0;
+    const fade=setInterval(()=>{
+      v=Math.min(.18,v+.015);
+      libraryMusic.volume=v;
+      if(v>=.18)clearInterval(fade);
+    },120);
+  }catch(e){}
+}
+
+function unlockSoundOnce(){
+  fadeMusicIn();
+  document.removeEventListener('pointerdown',unlockSoundOnce);
+  document.removeEventListener('keydown',unlockSoundOnce);
+}
+document.addEventListener('pointerdown',unlockSoundOnce,{once:true});
+document.addEventListener('keydown',unlockSoundOnce,{once:true});
+
+soundBtn.addEventListener('click',async e=>{
+  e.stopPropagation();
+  if(!musicStarted || libraryMusic.paused || libraryMusic.muted){
+    localStorage.removeItem('midnight-music-muted');
+    try{
+      libraryMusic.muted=false;
+      libraryMusic.volume=.18;
+      await libraryMusic.play();
+      musicStarted=true;
+    }catch(err){}
+  }else{
+    libraryMusic.pause();
+    localStorage.setItem('midnight-music-muted','1');
+  }
+  setSoundButton();
+});
+setSoundButton();
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -496,6 +554,7 @@ animation:titleShimmer 6s linear infinite}
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
 <button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
 <button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
+<button class="icon-btn" id="soundBtn" title="Toggle library soundtrack">♪ Sound</button>
   </div>
 </header>
 
@@ -588,7 +647,10 @@ animation:titleShimmer 6s linear infinite}
 
 <div class="morpheus" id="morpheus" aria-hidden="true">🐈‍⬛</div>
 
-<footer>📚 The Midnight Library · built for late nights, good books and one occasionally passing cat.</footer>
+<audio id="libraryMusic" preload="auto" loop>
+  <source src="assets/magical-fantasy-celesta.mp3" type="audio/mpeg">
+</audio>
+<footer>📚 The Midnight Library · built for late nights, good books and one occasionally passing cat.<br><small>Music: “Magical Fantasy Celesta” by MusicViktor11 · Pixabay</small></footer>
 
 <script src="catalog.js"></script>
 <script>
