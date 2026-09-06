@@ -389,6 +389,35 @@ animation:titleShimmer 6s linear infinite}
   background:linear-gradient(#141e31,#0a1425) !important;
 }
 .shelf-decor{color:#d8c08a}
+
+/* Neutralize visible blue: shelves should read black-indigo, not blue */
+.collection .shelf{
+  border-left-color:#080b12 !important;
+  border-right-color:#080b12 !important;
+  background-color:#080b12 !important;
+  background-image:
+    radial-gradient(circle at 4% 13%,#d7c08a 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 10% 34%,#aa8d59 0 1px,transparent 1.8px),
+    radial-gradient(circle at 16% 71%,#e6ddca 0 1px,transparent 1.8px),
+    radial-gradient(circle at 22% 20%,#c7b17c 0 1.1px,transparent 1.9px),
+    radial-gradient(circle at 29% 51%,#eee5d2 0 1px,transparent 1.8px),
+    radial-gradient(circle at 36% 82%,#aa8d59 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 43% 29%,#d7c08a 0 1px,transparent 1.8px),
+    radial-gradient(circle at 50% 64%,#eee5d2 0 1px,transparent 1.8px),
+    radial-gradient(circle at 57% 14%,#aa8d59 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 64% 76%,#d7c08a 0 1px,transparent 1.8px),
+    radial-gradient(circle at 71% 38%,#eee5d2 0 1.1px,transparent 1.9px),
+    radial-gradient(circle at 78% 17%,#aa8d59 0 1px,transparent 1.8px),
+    radial-gradient(circle at 85% 61%,#d7c08a 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 92% 27%,#eee5d2 0 1px,transparent 1.8px),
+    radial-gradient(circle at 97% 73%,#aa8d59 0 1.1px,transparent 1.9px),
+    radial-gradient(ellipse at 70% 38%,rgba(25,27,39,.28),transparent 40%),
+    linear-gradient(180deg,#121622 0%,#0c101a 48%,#070a11 100%) !important;
+}
+.collection .shelf:after{
+  background:linear-gradient(180deg,#171923,#0d1018 52%,#07090f) !important;
+  border-top:1px solid rgba(185,154,98,.5) !important;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
