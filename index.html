@@ -643,6 +643,14 @@ body:after{
 .parallax-near,.parallax-far{transition:transform .18s ease-out;will-change:transform}
 @media(prefers-reduced-motion:reduce){.alive-star,.drifter,.floating-page,.candle-glow-orb{animation:none}.parallax-near,.parallax-far{transform:none!important}}
 
+
+.hero-owl{position:absolute;bottom:28px;z-index:2;font-size:62px;line-height:1;filter:grayscale(1) brightness(1.65) sepia(.08) drop-shadow(0 8px 10px #0009) drop-shadow(0 0 12px rgba(220,230,240,.12));transform-origin:50% 100%;animation:owlWatch 8s ease-in-out infinite}
+.hero-owl-left{left:5.5%;transform:scaleX(-1)}.hero-owl-right{right:5.5%;animation-delay:-3.7s}
+.hero-owl:after{content:"";position:absolute;left:14%;right:14%;bottom:-7px;height:5px;border-radius:50%;background:#0a0806;opacity:.75;filter:blur(3px)}
+@keyframes owlWatch{0%,42%,48%,100%{translate:0 0}45%{translate:0 -3px}70%{rotate:0deg}74%{rotate:2deg}78%{rotate:-1deg}82%{rotate:0deg}}
+@media(max-width:700px){.hero-owl{font-size:42px;bottom:18px}.hero-owl-left{left:2%}.hero-owl-right{right:2%}}
+@media(prefers-reduced-motion:reduce){.hero-owl{animation:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -699,8 +707,8 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <section class="hero">
   <div class="arch">
-    <div class="candle left"><i class="flame"></i></div>
-    <div class="candle right"><i class="flame"></i></div>
+    <div class="hero-owl hero-owl-left" aria-hidden="true">🦉</div>
+    <div class="hero-owl hero-owl-right" aria-hidden="true">🦉</div>
     <div class="kicker">Mihaela's private collection</div>
     <div class="title-wrap">
       <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><span class="spark s4">✧</span>
