@@ -1005,6 +1005,7 @@ body:after{
 .request-book-card textarea:focus{border-color:var(--gold)}
 .account-status{color:var(--gold2);font-size:13px;margin-bottom:18px}
 .account-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.account-progress-wide{grid-column:1/-1}
 .account-stats>div{padding:14px 10px;text-align:center;border:1px solid #493925;border-radius:12px;background:#100d0a}
 .account-stats strong{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;color:var(--ink)}
 .account-stats span{font-size:11px;color:var(--muted)}
@@ -1279,6 +1280,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
       <div><strong id="accountFavs">0</strong><span>favourites</span></div>
       <div><strong id="accountReading">0</strong><span>reading</span></div>
       <div><strong id="accountRead">0</strong><span>finished</span></div>
+      <div class="account-progress-wide"><strong id="accountProgress">—</strong><span>current progress</span></div>
     </div>
     <p class="auth-note">Your favourites and reading status are synced to this account, so they follow you between browsers and devices.</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -1356,7 +1358,13 @@ async function loadCloudBookState(){
   const {data,error}=await supa.rpc('get_midnight_book_state');
   if(error||!Array.isArray(data))return;
   data.forEach(x=>{
-    saved[x.book_id]={...saved[x.book_id],status:x.status||saved[x.book_id]?.status,favorite:!!x.favorite};
+    saved[x.book_id]={
+      ...saved[x.book_id],
+      status:x.status||saved[x.book_id]?.status,
+      favorite:!!x.favorite,
+      cfi:x.epub_cfi||saved[x.book_id]?.cfi||null,
+      progressPct:x.progress_pct!=null?Number(x.progress_pct):saved[x.book_id]?.progressPct
+    };
   });
   persist();render();
 }
@@ -1366,8 +1374,26 @@ async function syncBookState(b){
   await supa.rpc('set_midnight_book_state',{
     p_book_id:b.id,
     p_status:s.status||b.status||'to-read',
-    p_favorite:!!(s.favorite??b.favorite)
+    p_favorite:!!(s.favorite??b.favorite),
+    p_epub_cfi:s.cfi||null,
+    p_progress_pct:s.progressPct!=null?s.progressPct:null
   });
+}
+
+let readingSyncTimer=null;
+function queueReadingPositionSync(book,cfi,pct){
+  if(!book||!sessionUser)return;
+  clearTimeout(readingSyncTimer);
+  readingSyncTimer=setTimeout(async()=>{
+    const s=stateFor(book);
+    await supa.rpc('set_midnight_book_state',{
+      p_book_id:book.id,
+      p_status:'reading',
+      p_favorite:!!effective(book,'favorite'),
+      p_epub_cfi:cfi||s.cfi||null,
+      p_progress_pct:pct!=null?pct:(s.progressPct!=null?s.progressPct:null)
+    });
+  },700);
 }
 function refreshAccountPanel(){
   if(!sessionUser)return;
@@ -1376,6 +1402,8 @@ function refreshAccountPanel(){
   document.getElementById('accountFavs').textContent=books.filter(b=>!!effective(b,'favorite')).length;
   document.getElementById('accountReading').textContent=books.filter(b=>effective(b,'status')==='reading').length;
   document.getElementById('accountRead').textContent=books.filter(b=>effective(b,'status')==='read').length;
+  const active=books.find(b=>effective(b,'status')==='reading'&&stateFor(b).progressPct!=null);
+  document.getElementById('accountProgress').textContent=active?active.title+' · '+Math.round(stateFor(active).progressPct)+'%':'No active EPUB progress';
 }
 
 function isRestricted(b){ return ['Gothic','Horror','Crime','Thriller'].includes(b.genre); }
@@ -1572,9 +1600,14 @@ async function loadEpubArrayBuffer(buf){
   epubRendition.themes.select('paper');
   epubRendition.themes.fontSize('100%');
 
-  const savedCfi=(stateFor(activeBook).cfi)||null;
+  const savedState=stateFor(activeBook);
+  const savedCfi=savedState.cfi||null;
   try{
     await epubRendition.display(savedCfi||undefined);
+    if(savedCfi){
+      const p=document.getElementById('epubProgress');
+      if(p) p.textContent='Restored your place'+(savedState.progressPct!=null?' · '+Math.round(savedState.progressPct)+'%':'');
+    }
   }catch(err){
     console.error('EPUB display error',err);
     try{ await epubRendition.display(); }
@@ -1593,11 +1626,13 @@ async function loadEpubArrayBuffer(buf){
   try{ await epubBook.ready; await epubBook.locations.generate(1200); }catch(e){}
   epubRendition.on('relocated',loc=>{
     const cfi=loc.start.cfi;
-    const pct=epubBook.locations && epubBook.locations.length() ? epubBook.locations.percentageFromCfi(cfi) : 0;
+    const rawPct=epubBook.locations && epubBook.locations.length() ? epubBook.locations.percentageFromCfi(cfi) : 0;
+    const pct=Math.max(0,Math.min(100,rawPct*100));
     const progress=document.getElementById('epubProgress');
-    if(progress) progress.textContent=pct ? Math.round(pct*100)+'% · progress saved' : 'Reading position saved';
-    saved[activeBook.id]={...stateFor(activeBook),cfi,status:'reading'};
-    persist(); updateStats();
+    if(progress) progress.textContent=(pct>0?Math.round(pct)+'% · ':'')+'progress synced';
+    saved[activeBook.id]={...stateFor(activeBook),cfi,progressPct:pct,status:'reading'};
+    persist(); updateStats(); refreshAccountPanel();
+    queueReadingPositionSync(activeBook,cfi,pct);
   });
 }
 
@@ -1857,7 +1892,7 @@ document.getElementById('statusBtn').addEventListener('click',()=>{
   const next=now==='to-read'?'reading':now==='reading'?'read':'to-read';
   saved[activeBook.id]={...stateFor(activeBook),status:next};persist();syncBookState(activeBook);syncReaderButtons();render();refreshAccountPanel();
 });
-document.getElementById('closeReader').addEventListener('click',async()=>{destroyEpub();const card=document.querySelector('.reader-card');card.classList.remove('full-page');reader.classList.remove('full-page');if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}document.getElementById('fullPageBtn').textContent='⛶ Full page';reader.classList.remove('open');reader.setAttribute('aria-hidden','true');readerBody.innerHTML='';});
+document.getElementById('closeReader').addEventListener('click',async()=>{if(activeBook&&stateFor(activeBook).cfi)queueReadingPositionSync(activeBook,stateFor(activeBook).cfi,stateFor(activeBook).progressPct);destroyEpub();const card=document.querySelector('.reader-card');card.classList.remove('full-page');reader.classList.remove('full-page');if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}document.getElementById('fullPageBtn').textContent='⛶ Full page';reader.classList.remove('open');reader.setAttribute('aria-hidden','true');readerBody.innerHTML='';});
 reader.addEventListener('click',e=>{if(e.target===reader)document.getElementById('closeReader').click()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('closeReader').click()});
 search.addEventListener('input',render);
