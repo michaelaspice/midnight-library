@@ -805,6 +805,37 @@ body:after{
  .enchanted-branch-divider:after{right:0;top:17px;width:125px;font-size:24px;letter-spacing:10px}
 }
 
+
+/* Wider immersive layout on large screens */
+.library{
+  width:min(96vw,1800px)!important;
+}
+.hero .hero-inner,
+.hero-inner{
+  width:min(92vw,1500px)!important;
+  max-width:none!important;
+}
+.enchanted-branch-divider{
+  width:min(97vw,1850px)!important;
+}
+.collection .shelf{
+  width:100%!important;
+}
+.section-head{
+  width:100%!important;
+}
+@media(min-width:1500px){
+  .library{width:96vw!important}
+  .hero .hero-inner,.hero-inner{width:92vw!important}
+  .collection .shelf{padding-left:34px!important;padding-right:34px!important}
+  .books{gap:8px!important}
+}
+@media(min-width:1900px){
+  .library{width:97vw!important}
+  .hero .hero-inner,.hero-inner{width:90vw!important}
+  .collection .shelf{padding-left:42px!important;padding-right:42px!important}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
