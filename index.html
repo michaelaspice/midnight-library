@@ -1096,6 +1096,23 @@ body:after{
   .enchanted-branch-divider .twig{animation:none!important}
 }
 
+
+/* Breeze visibility pass: ~20% faster with a slightly clearer sway */
+.enchanted-branch-divider .leaf{animation-duration:6s!important}
+.enchanted-branch-divider .l2{animation-duration:6.7s!important}
+.enchanted-branch-divider .l3{animation-duration:5.5s!important}
+.enchanted-branch-divider .l4{animation-duration:7.3s!important}
+.enchanted-branch-divider .l5{animation-duration:6.2s!important}
+.enchanted-branch-divider .l6{animation-duration:7s!important}
+.enchanted-branch-divider .l7{animation-duration:5.8s!important}
+.enchanted-branch-divider .l8{animation-duration:7.5s!important}
+@keyframes leafBreeze{
+  0%,100%{translate:0 0;rotate:0deg}
+  22%{translate:2px -2px;rotate:3deg}
+  48%{translate:5px 0;rotate:-4deg}
+  72%{translate:2px 2px;rotate:2.5deg}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
