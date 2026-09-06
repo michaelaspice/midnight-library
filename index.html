@@ -181,6 +181,25 @@ animation:titleShimmer 6s linear infinite}
   .progress-text{font-size:11px}
 }
 
+
+/* Themed shelf dressing */
+.collection .shelf{overflow:hidden}
+.shelf-decor{margin-left:auto;align-self:flex-end;display:flex;align-items:flex-end;justify-content:flex-end;gap:10px;min-width:190px;padding:0 16px 8px 28px;pointer-events:none;filter:drop-shadow(0 7px 8px #0008)}
+.shelf-decor .prop{display:grid;place-items:center;font-size:38px;line-height:1;min-width:44px;min-height:48px;transition:.3s ease}
+.shelf-decor .prop.small{font-size:25px;min-width:30px}
+.shelf-decor .prop.tall{font-size:50px}
+.shelf-decor .stack{font-family:"Cormorant Garamond",serif;font-size:12px;line-height:1.15;color:#d7bd86;border:1px solid #725338;background:linear-gradient(#3a2518,#20140e);padding:8px 12px;box-shadow:0 5px 8px #0007;transform:rotate(-1deg)}
+.collection:hover .shelf-decor .prop{transform:translateY(-3px)}
+.collection.theme-harry-potter .shelf{background:radial-gradient(circle at 82% 34%,#4b321d55,transparent 22%),linear-gradient(90deg,#21140e 0 8%,#321c12 8% 92%,#21140e 92%)}
+.collection.theme-harry-potter .shelf-decor{color:#e2bd73}
+.collection.theme-mind-self .shelf{background:radial-gradient(circle at 83% 35%,#48624733,transparent 25%),linear-gradient(90deg,#21140e 0 8%,#2b2119 8% 92%,#21140e 92%)}
+.collection.theme-ai-technology .shelf{background:radial-gradient(circle at 84% 34%,#315f7c44,transparent 24%),linear-gradient(90deg,#16171b 0 8%,#1c2730 8% 92%,#16171b 92%)}
+.collection.theme-business-leadership .shelf{background:radial-gradient(circle at 84% 34%,#8b673233,transparent 24%),linear-gradient(90deg,#21140e 0 8%,#302218 8% 92%,#21140e 92%)}
+.collection.theme-tarot-spirituality .shelf{background:radial-gradient(circle at 84% 34%,#6c497044,transparent 25%),linear-gradient(90deg,#18111d 0 8%,#27172b 8% 92%,#18111d 92%)}
+.collection.theme-health-body .shelf{background:radial-gradient(circle at 84% 34%,#55744b38,transparent 25%),linear-gradient(90deg,#171b15 0 8%,#243020 8% 92%,#171b15 92%)}
+.collection.theme-lifestyle-skills .shelf{background:radial-gradient(circle at 84% 34%,#87674233,transparent 25%),linear-gradient(90deg,#211711 0 8%,#32251a 8% 92%,#211711 92%)}
+.collection.theme-education-teaching .shelf{background:radial-gradient(circle at 84% 34%,#4b607a33,transparent 25%),linear-gradient(90deg,#17191b 0 8%,#242a2e 8% 92%,#17191b 92%)}
+@media(max-width:700px){.shelf-decor{min-width:125px;padding-left:12px;gap:4px}.shelf-decor .prop{font-size:28px}.shelf-decor .prop.tall{font-size:38px}.shelf-decor .stack{display:none}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -336,7 +355,20 @@ function render(){
   groups.forEach(name=>{
     const group=list.filter(b=>b.collection===name).sort((a,b)=>a.order-b.order);
     const section=document.createElement('section');section.className='collection';
-    section.innerHTML='<div class="collection-title"><h3>'+name+'</h3><span>'+group.length+' '+(group.length===1?'volume':'volumes')+'</span></div><div class="shelf"><div class="books"></div></div>';
+    const themeKey=(name||'').toLowerCase().replace(/&/g,' ').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    section.classList.add('theme-'+themeKey);
+    const decorMap={
+      'harry-potter':'<div class="prop tall">🦉</div><div class="stack">MISCHIEF<br>MANAGED</div><div class="prop small">🪄</div><div class="prop">✉️</div>',
+      'mind-self':'<div class="prop tall">🪴</div><div class="stack">PAUSE<br>REFLECT<br>GROW</div><div class="prop">🕯️</div>',
+      'ai-technology':'<div class="prop tall">🤖</div><div class="stack">CURIOSITY<br>→<br>TOMORROW</div><div class="prop">💡</div>',
+      'business-leadership':'<div class="prop tall">🌍</div><div class="stack">IDEAS<br>IMPACT<br>PROGRESS</div><div class="prop">📈</div>',
+      'tarot-spirituality':'<div class="prop tall">🔮</div><div class="stack">INTUITION<br>MAGIC<br>WITHIN</div><div class="prop">🌙</div><div class="prop small">✨</div>',
+      'health-body':'<div class="prop tall">🪴</div><div class="stack">REST<br>MOVE<br>THRIVE</div><div class="prop">🧘</div>',
+      'lifestyle-skills':'<div class="prop tall">📷</div><div class="stack">COLLECT<br>MOMENTS<br>NOT THINGS</div><div class="prop">🗺️</div>',
+      'education-teaching':'<div class="prop tall">🌍</div><div class="stack">LEARN<br>TEACH<br>GROW</div><div class="prop">✏️</div>'
+    };
+    const decor=decorMap[themeKey]||'<div class="prop">📚</div><div class="prop small">🕯️</div>';
+    section.innerHTML='<div class="collection-title"><h3>'+name+'</h3><span>'+group.length+' '+(group.length===1?'volume':'volumes')+'</span></div><div class="shelf"><div class="books"></div><div class="shelf-decor">'+decor+'</div></div>';
     const row=section.querySelector('.books');
     group.forEach(b=>{
       const el=document.createElement('article');
