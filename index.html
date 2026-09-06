@@ -78,18 +78,23 @@ box-shadow:inset 0 0 60px #0009,0 20px 30px #0006}
 .book{position:relative;flex:0 0 58px;height:220px;border-radius:3px 6px 3px 3px;cursor:pointer;transition:.25s ease;box-shadow:inset -5px 0 10px #0004,4px 4px 10px #0007;border:1px solid #0008}
 .book.medium{height:205px}.book.short{height:185px}
 .book:hover{transform:translateY(-18px) rotate(-1deg);filter:brightness(1.08)}
+.book{background-blend-mode:multiply}
+.book::selection{background:transparent}
+.book .spine-title{color:#e5d4ad;text-shadow:0 1px #0008}
+.book:after{box-shadow:0 1px rgba(0,0,0,.35)}
+.book{filter:saturate(.82) sepia(.08)}
 .book:before,.book:after{content:"";position:absolute;left:6px;right:6px;height:1px;background:rgba(255,224,154,.45)}
 .book:before{top:18px}.book:after{bottom:18px}
 .book .spine-title{position:absolute;inset:30px 8px;writing-mode:vertical-rl;transform:rotate(180deg);font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:700;letter-spacing:.02em;overflow:hidden}
 .book .author{display:none}
-.oxblood{background:linear-gradient(90deg,#5b1e1e,#8d3830,#4e1616)}
-.forest{background:linear-gradient(90deg,#173729,#285943,#112b20)}
-.wine{background:linear-gradient(90deg,#351327,#6b2949,#2b0d20)}
-.navy{background:linear-gradient(90deg,#172943,#29466e,#111e33)}
-.brown{background:linear-gradient(90deg,#4e2f1f,#775139,#362016)}
-.sage{background:linear-gradient(90deg,#4e604b,#75866f,#3b4d39)}
-.charcoal{background:linear-gradient(90deg,#282727,#4b4846,#1c1b1a)}
-.plum{background:linear-gradient(90deg,#4c2a45,#75486f,#382033)}
+.oxblood{background:linear-gradient(90deg,#381414,#6b2b25 48%,#2a0e0d)}
+.forest{background:linear-gradient(90deg,#10271d,#35503a 48%,#0d1d16)}
+.wine{background:linear-gradient(90deg,#29101f,#593044 48%,#210b18)}
+.navy{background:linear-gradient(90deg,#111c2d,#30435a 48%,#0c1522)}
+.brown{background:linear-gradient(90deg,#342117,#684831 48%,#25170f)}
+.sage{background:linear-gradient(90deg,#394438,#68715c 48%,#2a3429)}
+.charcoal{background:linear-gradient(90deg,#1c1b1a,#45413d 48%,#141312)}
+.plum{background:linear-gradient(90deg,#342033,#65445f 48%,#261725)}
 .empty{padding:50px 20px;color:var(--muted);text-align:center;width:100%}
 .collection{margin:0 0 64px}.collection-title{display:flex;align-items:center;gap:12px;margin:0 0 12px}.collection-title h3{font-size:30px}.collection-title span{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .collection .shelf{margin-top:10px;min-height:285px}.collection .books{min-height:220px}
@@ -1092,6 +1097,7 @@ function render(){
       'a-song-of-ice-and-fire':'<div class="prop tall">🐉</div><div class="stack">WINTER<br>IS<br>COMING</div><div class="prop">⚔️</div><div class="prop small">👑</div><div class="prop small">❄️</div>',
       'the-merlin-trilogy':'<div class="prop tall">🔮</div><div class="stack">MERLIN<br>MAGIC<br>PROPHECY</div><div class="prop">🕯️</div><div class="prop small">🌿</div><div class="prop small">✨</div>',
       'arthurian-legends':'<div class="prop tall">⚔️</div><div class="stack">CAMELOT<br>HONOUR<br>LEGEND</div><div class="prop">👑</div><div class="prop small">🏰</div><div class="prop small">✨</div>',
+      'off-campus':'<div class="prop tall">🏒</div><div class="stack">BRIAR<br>HOCKEY<br>ROMANCE</div><div class="prop">❤️</div><div class="prop small">⛸️</div><div class="prop small">☕</div>',
       'mind-self':'<div class="prop tall">🪴</div><div class="stack">PAUSE<br>REFLECT<br>GROW</div><div class="prop">🕯️</div>',
       'ai-technology':'<div class="prop tall">🤖</div><div class="stack">CURIOSITY<br>→<br>TOMORROW</div><div class="prop">💡</div>',
       'business-leadership':'<div class="prop tall">🌍</div><div class="stack">IDEAS<br>IMPACT<br>PROGRESS</div><div class="prop">📈</div>',
