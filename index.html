@@ -995,6 +995,67 @@ body:after{
 }
 @media(prefers-reduced-motion:reduce){.owl-title-perch .owl-lid{animation:none}}
 
+
+.request-book-card textarea{
+  width:100%;min-height:150px;resize:vertical;
+  padding:13px 14px;margin:12px 0 14px;border-radius:12px;
+  border:1px solid #6e5738;background:#0f0c09;color:var(--ink);
+  font:inherit;line-height:1.55;outline:none
+}
+.request-book-card textarea:focus{border-color:var(--gold)}
+.account-status{color:var(--gold2);font-size:13px;margin-bottom:18px}
+.account-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.account-stats>div{padding:14px 10px;text-align:center;border:1px solid #493925;border-radius:12px;background:#100d0a}
+.account-stats strong{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;color:var(--ink)}
+.account-stats span{font-size:11px;color:var(--muted)}
+.book-request-copy{min-width:0}
+.book-request-copy b{display:block;color:#e6d7bb;font-size:13px;line-height:1.45}
+.book-request-copy small{color:var(--muted);font-size:11px}
+
+@media(max-width:760px){
+  .topbar{padding:12px 14px;align-items:flex-start;gap:10px}
+  .brand{font-size:19px}
+  .nav-actions{flex-wrap:wrap;justify-content:flex-end;gap:6px}
+  .nav-actions .icon-btn{padding:8px 10px;font-size:12px}
+  #collections .collection .shelf{
+    position:relative!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+    overflow:hidden!important;
+  }
+  #collections .collection .books{
+    flex:1 1 100%!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    padding:12px 4px 0!important;
+    gap:4px!important;
+    scrollbar-width:none;
+  }
+  #collections .collection .books::-webkit-scrollbar{display:none}
+  #collections .collection .book{
+    flex:0 0 42px!important;
+  }
+  #collections .collection .book.medium{height:198px}
+  #collections .collection .book.short{height:180px}
+  #collections .collection .shelf-decor{
+    position:absolute!important;
+    right:6px!important;
+    bottom:0!important;
+    min-width:0!important;
+    width:auto!important;
+    max-width:88px!important;
+    padding:0!important;
+    gap:2px!important;
+    opacity:.62;
+    z-index:1;
+  }
+  #collections .collection .shelf-decor .prop{font-size:22px;min-width:22px;min-height:28px}
+  #collections .collection .shelf-decor .prop.tall{font-size:28px}
+  #collections .collection .shelf-decor .prop.small{font-size:17px;min-width:18px}
+  #collections .collection .book{z-index:2}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -1044,6 +1105,8 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   <div class="brand">✦ The Midnight Library</div>
   <div class="nav-actions">
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
+<button class="icon-btn" id="requestBookBtn">📖 Request a book</button>
+<button class="icon-btn" id="accountBtn" style="display:none">👤 My account</button>
 <button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
 <button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
   </div>
@@ -1175,7 +1238,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   <div class="card-grid">
     <article class="info-card"><h3>Currently Reading</h3><p id="currentReading">Nothing selected yet. A scandal.</p></article>
     <article class="info-card"><h3>The Restricted Section</h3><p>Gothic, horror, crime, strange little books and anything else that deserves dramatic shelving.</p></article>
-    <article class="info-card"><h3>Reading memory</h3><p>Favourites, status, rating and last page can be stored locally in this browser without an account.</p></article>
+    <article class="info-card"><h3>Reading memory</h3><p>Signed-in readers now keep favourites and reading status synced across devices. Local storage remains as an offline fallback.</p></article>
   </div>
 </main>
 
@@ -1191,6 +1254,39 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     <div class="upload-status" id="authStatus"></div>
   </div>
 </div>
+
+<div class="auth-panel" id="requestBookPanel">
+  <div class="auth-card request-book-card">
+    <div class="kicker">Reader requests</div>
+    <h3>Request a book</h3>
+    <p>Tell the librarian what you want added. You can include a title, author, series, edition, or just describe what you are looking for.</p>
+    <textarea id="bookRequestText" maxlength="2000" placeholder="e.g. The Secret History by Donna Tartt — preferably EPUB"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="icon-btn" id="sendBookRequest">Send request</button>
+      <button class="icon-btn" id="closeBookRequest">Cancel</button>
+    </div>
+    <div class="upload-status" id="bookRequestStatus"></div>
+    <div class="auth-note">Requests are saved to the Librarian's Desk. After saving, Midnight Library can also open a pre-addressed email to july.mihaela.burlacu@gmail.com.</div>
+  </div>
+</div>
+<div class="auth-panel" id="accountPanel">
+  <div class="auth-card account-card">
+    <div class="kicker">Reader account</div>
+    <h3>My library account</h3>
+    <p id="accountEmail" style="margin-bottom:6px"></p>
+    <div class="account-status" id="accountAccess"></div>
+    <div class="account-stats">
+      <div><strong id="accountFavs">0</strong><span>favourites</span></div>
+      <div><strong id="accountReading">0</strong><span>reading</span></div>
+      <div><strong id="accountRead">0</strong><span>finished</span></div>
+    </div>
+    <p class="auth-note">Your favourites and reading status are synced to this account, so they follow you between browsers and devices.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="icon-btn" id="accountSignOut">🔓 Sign out</button>
+      <button class="icon-btn" id="closeAccount">Close</button>
+    </div>
+  </div>
+</div>
 <div class="librarian" id="librarian">
  <div class="librarian-card">
   <div class="kicker">Private collection</div><h3 style="font-size:36px">Librarian's Desk</h3>
@@ -1203,7 +1299,12 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   <div class="kicker">Access requests</div><h3 style="font-size:28px;margin-top:4px">Readers at the door</h3>
   <p style="color:var(--muted);line-height:1.5">Approve or decline signed-in visitors who have asked to read the private collection.</p>
   <div id="accessRequestList" class="request-list"><span style="color:var(--muted)">No pending requests.</span></div>
+  
   <hr style="border:0;border-top:1px solid #493925;margin:26px 0">
+  <div class="kicker">Book requests</div><h3 style="font-size:28px;margin-top:4px">Requested for the shelves</h3>
+  <p style="color:var(--muted);line-height:1.5">Requests sent by signed-in readers appear here.</p>
+  <div id="bookRequestList" class="request-list"><span style="color:var(--muted)">No pending book requests.</span></div>
+<hr style="border:0;border-top:1px solid #493925;margin:26px 0">
   <div class="kicker">Shared access</div><h3 style="font-size:28px;margin-top:4px">Invite a friend</h3>
   <p style="color:var(--muted);line-height:1.5">Add an email address here. When your friend signs in with that same email, Midnight Library will unlock the private books for her too.</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="friendEmail" type="email" placeholder="friend@example.com" style="flex:1;min-width:240px;padding:11px 12px;border-radius:9px;border:1px solid #6e5738;background:#0f0c09;color:var(--ink)"><button class="icon-btn" id="inviteFriendBtn">Send access</button></div>
@@ -1248,7 +1349,34 @@ let activeFilter='all', activeWing='all', activeBook=null;
 const saved = JSON.parse(localStorage.getItem('midnight-library') || '{}');
 function stateFor(b){ return saved[b.id] || {}; }
 function effective(b,key){ return stateFor(b)[key] ?? b[key]; }
+
 function persist(){ localStorage.setItem('midnight-library', JSON.stringify(saved)); }
+async function loadCloudBookState(){
+  if(!sessionUser)return;
+  const {data,error}=await supa.rpc('get_midnight_book_state');
+  if(error||!Array.isArray(data))return;
+  data.forEach(x=>{
+    saved[x.book_id]={...saved[x.book_id],status:x.status||saved[x.book_id]?.status,favorite:!!x.favorite};
+  });
+  persist();render();
+}
+async function syncBookState(b){
+  if(!sessionUser||!b)return;
+  const s=stateFor(b);
+  await supa.rpc('set_midnight_book_state',{
+    p_book_id:b.id,
+    p_status:s.status||b.status||'to-read',
+    p_favorite:!!(s.favorite??b.favorite)
+  });
+}
+function refreshAccountPanel(){
+  if(!sessionUser)return;
+  document.getElementById('accountEmail').textContent=sessionUser.email||'Signed-in reader';
+  document.getElementById('accountAccess').textContent=ownerAccess?'✦ Library owner':'✦ Signed-in reader';
+  document.getElementById('accountFavs').textContent=books.filter(b=>!!effective(b,'favorite')).length;
+  document.getElementById('accountReading').textContent=books.filter(b=>effective(b,'status')==='reading').length;
+  document.getElementById('accountRead').textContent=books.filter(b=>effective(b,'status')==='read').length;
+}
 
 function isRestricted(b){ return ['Gothic','Horror','Crime','Thriller'].includes(b.genre); }
 
@@ -1510,7 +1638,57 @@ document.getElementById('sendMagicLink').onclick=async()=>{
 };
 function updateAuthButton(){
   document.getElementById('authBtn').textContent=sessionUser?'🔓 Leave library':'🔐 Enter library';
+  document.getElementById('accountBtn').style.display=sessionUser?'inline-flex':'none';
   document.getElementById('librarianBtn').style.display=(sessionUser&&ownerAccess)?'inline-flex':'none';
+  if(sessionUser)refreshAccountPanel();
+}
+
+
+document.getElementById('accountBtn').onclick=()=>{
+  if(!sessionUser){openAuth();return}
+  refreshAccountPanel();
+  document.getElementById('accountPanel').classList.add('open');
+};
+document.getElementById('closeAccount').onclick=()=>document.getElementById('accountPanel').classList.remove('open');
+document.getElementById('accountSignOut').onclick=async()=>{
+  await supa.auth.signOut();
+  document.getElementById('accountPanel').classList.remove('open');
+};
+document.getElementById('requestBookBtn').onclick=()=>{
+  if(!sessionUser){
+    openAuth();
+    document.getElementById('authStatus').textContent='Sign in first, then you can send a book request.';
+    return;
+  }
+  document.getElementById('bookRequestText').value='';
+  document.getElementById('bookRequestStatus').textContent='';
+  document.getElementById('requestBookPanel').classList.add('open');
+};
+document.getElementById('closeBookRequest').onclick=()=>document.getElementById('requestBookPanel').classList.remove('open');
+document.getElementById('sendBookRequest').onclick=async()=>{
+  const textValue=document.getElementById('bookRequestText').value.trim();
+  const status=document.getElementById('bookRequestStatus');
+  if(textValue.length<2){status.textContent='Write the book or series you want first.';return}
+  status.textContent='Sending your request…';
+  const {data,error}=await supa.rpc('submit_midnight_book_request',{request_text:textValue});
+  if(error||data!==true){status.textContent='Could not save the request. Please try again.';return}
+  status.textContent='✦ Request saved for the librarian. Opening an email draft too…';
+  const subject=encodeURIComponent('Midnight Library book request');
+  const body=encodeURIComponent('Book request from '+(sessionUser?.email||'a reader')+':\n\n'+textValue);
+  setTimeout(()=>{window.location.href='mailto:july.mihaela.burlacu@gmail.com?subject='+subject+'&body='+body},350);
+};
+async function loadBookRequests(){
+  const box=document.getElementById('bookRequestList');
+  if(!box||!ownerAccess)return;
+  const {data,error}=await supa.rpc('list_midnight_book_requests');
+  if(error||!data?.length){box.innerHTML='<span style="color:var(--muted)">No pending book requests.</span>';return}
+  const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  box.innerHTML=data.map(r=>'<div class="request-row"><div class="book-request-copy"><b>'+esc(r.request_text)+'</b><small>'+(r.email?esc(r.email):'Signed-in reader')+'</small></div><span class="request-actions"><button class="icon-btn" data-book-request="'+r.id+'" data-book-review="done">Added</button><button class="icon-btn" data-book-request="'+r.id+'" data-book-review="declined">Decline</button></span></div>').join('');
+  box.querySelectorAll('[data-book-request]').forEach(btn=>btn.onclick=async()=>{
+    btn.disabled=true;
+    const {data:ok}=await supa.rpc('review_midnight_book_request',{request_id:Number(btn.dataset.bookRequest),new_status:btn.dataset.bookReview});
+    if(ok)await loadBookRequests();else btn.disabled=false;
+  });
 }
 
 let batchMatches=[];
@@ -1552,7 +1730,7 @@ function renderBatch(){
     return '<div class="match-row"><div><b>'+x.file.name+'</b><br><small>'+(x.book?'→ '+x.book.title+' — '+x.book.author:'No confident catalogue match')+'</small></div><div class="'+cls+'">'+right+'</div></div>';
   }).join('');
 }
-document.getElementById('librarianBtn').onclick=()=>{document.getElementById('librarian').classList.add('open');loadAccessRequests()};
+document.getElementById('librarianBtn').onclick=()=>{document.getElementById('librarian').classList.add('open');loadAccessRequests();loadBookRequests()};
 document.getElementById('closeLibrarian').onclick=()=>document.getElementById('librarian').classList.remove('open');
 document.getElementById('chooseBatch').onclick=()=>document.getElementById('batchInput').click();
 document.getElementById('batchInput').onchange=e=>matchBatch(e.target.files);
@@ -1651,12 +1829,13 @@ async function refreshAuth(){
     ownerAccess=claimed===true;
   }
   updateAuthButton();
-  if(ownerAccess) loadAccessRequests();
+  if(sessionUser) await loadCloudBookState();
+  if(ownerAccess){loadAccessRequests();loadBookRequests();}
 }
 supa.auth.onAuthStateChange(async(_event,session)=>{
   sessionUser=session?.user||null; ownerAccess=false;
   if(sessionUser){
-    setTimeout(async()=>{const {data}=await supa.rpc('claim_midnight_library');ownerAccess=data===true;updateAuthButton();if(ownerAccess)loadAccessRequests();closeAuth()},0);
+    setTimeout(async()=>{const {data}=await supa.rpc('claim_midnight_library');ownerAccess=data===true;updateAuthButton();await loadCloudBookState();if(ownerAccess){loadAccessRequests();loadBookRequests();}closeAuth()},0);
   }else updateAuthButton();
 });
 refreshAuth();
@@ -1670,13 +1849,13 @@ function syncReaderButtons(){
 }
 document.getElementById('favBtn').addEventListener('click',()=>{
   if(!activeBook)return;
-  saved[activeBook.id]={...stateFor(activeBook),favorite:!effective(activeBook,'favorite')};persist();syncReaderButtons();render();
+  saved[activeBook.id]={...stateFor(activeBook),favorite:!effective(activeBook,'favorite')};persist();syncBookState(activeBook);syncReaderButtons();render();refreshAccountPanel();
 });
 document.getElementById('statusBtn').addEventListener('click',()=>{
   if(!activeBook)return;
   const now=effective(activeBook,'status');
   const next=now==='to-read'?'reading':now==='reading'?'read':'to-read';
-  saved[activeBook.id]={...stateFor(activeBook),status:next};persist();syncReaderButtons();render();
+  saved[activeBook.id]={...stateFor(activeBook),status:next};persist();syncBookState(activeBook);syncReaderButtons();render();refreshAccountPanel();
 });
 document.getElementById('closeReader').addEventListener('click',async()=>{destroyEpub();const card=document.querySelector('.reader-card');card.classList.remove('full-page');reader.classList.remove('full-page');if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}document.getElementById('fullPageBtn').textContent='⛶ Full page';reader.classList.remove('open');reader.setAttribute('aria-hidden','true');readerBody.innerHTML='';});
 reader.addEventListener('click',e=>{if(e.target===reader)document.getElementById('closeReader').click()});
