@@ -979,6 +979,22 @@ body:after{
  .owl-title-perch .owl-wing{top:30px;width:88px;height:48px}
 }
 
+
+/* Living guardian: rare, slow blink */
+.owl-title-perch .owl-lid{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:owlSlowBlink 7.8s ease-in-out infinite;
+}
+.owl-title-perch .owl-lid-right{animation-delay:.035s}
+@keyframes owlSlowBlink{
+  0%,43%,49%,100%{ry:0}
+  45%{ry:3}
+  46.2%,47.1%{ry:12}
+  48.2%{ry:2}
+}
+@media(prefers-reduced-motion:reduce){.owl-title-perch .owl-lid{animation:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -1070,6 +1086,8 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
       <circle cx="136" cy="81" r="12" fill="#d8b34e"/>
       <circle cx="84" cy="81" r="6.5" fill="#17130d"/>
       <circle cx="136" cy="81" r="6.5" fill="#17130d"/>
+      <ellipse class="owl-lid owl-lid-left" cx="84" cy="81" rx="13" ry="0" fill="#ddd9cf"/>
+      <ellipse class="owl-lid owl-lid-right" cx="136" cy="81" rx="13" ry="0" fill="#ddd9cf"/>
       <circle cx="80" cy="76" r="2.2" fill="#fff"/>
       <circle cx="132" cy="76" r="2.2" fill="#fff"/>
 
