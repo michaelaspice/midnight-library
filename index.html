@@ -238,6 +238,14 @@ animation:titleShimmer 6s linear infinite}
   background:linear-gradient(#172b4b,#0b1830);
   box-shadow:0 5px 10px #000a;
 }
+
+.collection.theme-the-witcher .shelf{box-shadow:inset 0 0 60px rgba(180,210,230,.08),0 14px 30px #0008}
+.collection.theme-the-vampire-diaries .shelf{box-shadow:inset 0 0 65px rgba(130,20,45,.18),0 14px 30px #0008}
+.collection.theme-the-originals .shelf{box-shadow:inset 0 0 65px rgba(90,55,120,.16),0 14px 30px #0008}
+.collection.theme-the-lord-of-the-rings .shelf{box-shadow:inset 0 0 65px rgba(55,95,60,.16),0 14px 30px #0008}
+.collection.theme-silo .shelf{box-shadow:inset 0 0 65px rgba(95,95,95,.13),0 14px 30px #0008}
+.collection.theme-bridgerton .shelf{box-shadow:inset 0 0 65px rgba(205,135,155,.14),0 14px 30px #0008}
+.collection.theme-t-h-white .shelf{box-shadow:inset 0 0 65px rgba(95,70,150,.16),0 14px 30px #0008}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -397,6 +405,13 @@ function render(){
     section.classList.add('theme-'+themeKey);
     const decorMap={
       'harry-potter':'<div class="prop tall">🦉</div><div class="stack">MISCHIEF<br>MANAGED</div><div class="prop small">🪄</div><div class="prop">✉️</div>',
+      'the-witcher':'<div class="prop tall">🐺</div><div class="stack">DESTINY<br>CHOICE<br>PATH</div><div class="prop">🐎</div><div class="prop small">🕯️</div>',
+      'the-vampire-diaries':'<div class="prop tall">🥀</div><div class="stack">LOVE<br>BLOOD<br>ETERNITY</div><div class="prop">🩸</div><div class="prop small">❤️</div>',
+      'the-originals':'<div class="prop tall">🐺</div><div class="stack">FAMILY<br>POWER<br>ALWAYS</div><div class="prop">🧙‍♀️</div><div class="prop small">⭐</div>',
+      'the-lord-of-the-rings':'<div class="prop tall">🧝</div><div class="stack">HOME<br>COURAGE<br>MAGIC</div><div class="prop">🧙</div><div class="prop small">🍃</div>',
+      'silo':'<div class="prop tall">☄️</div><div class="stack">TRUTH<br>BURIED<br>BELOW</div><div class="prop">☣️</div><div class="prop small">🏭</div>',
+      'bridgerton':'<div class="prop tall">🌹</div><div class="stack">LOVE<br>LETTERS<br>SOCIETY</div><div class="prop">🪶</div><div class="prop small">🫖</div>',
+      't-h-white':'<div class="prop tall">🧙</div><div class="stack">ALL<br>MAGIC<br>BEGINS</div><div class="prop">⚔️</div><div class="prop small">✨</div>',
       'mind-self':'<div class="prop tall">🪴</div><div class="stack">PAUSE<br>REFLECT<br>GROW</div><div class="prop">🕯️</div>',
       'ai-technology':'<div class="prop tall">🤖</div><div class="stack">CURIOSITY<br>→<br>TOMORROW</div><div class="prop">💡</div>',
       'business-leadership':'<div class="prop tall">🌍</div><div class="stack">IDEAS<br>IMPACT<br>PROGRESS</div><div class="prop">📈</div>',
