@@ -651,6 +651,42 @@ body:after{
 @media(max-width:700px){.hero-owl{font-size:42px;bottom:18px}.hero-owl-left{left:2%}.hero-owl-right{right:2%}}
 @media(prefers-reduced-motion:reduce){.hero-owl{animation:none}}
 
+
+/* Enchanted scenery owl + living branch divider */
+.hero-owl{display:none!important}
+.scenery-owl{position:absolute;right:4.5%;bottom:17px;width:122px;height:158px;z-index:3;filter:drop-shadow(0 14px 13px #000b);transform:rotate(1deg);pointer-events:none}
+.owl-body{position:absolute;inset:7px 12px 0;border-radius:48% 48% 42% 42% / 36% 36% 58% 58%;background:
+radial-gradient(ellipse at 37% 27%,#1d1914 0 3px,#e8dfce 4px 12px,transparent 13px),
+radial-gradient(ellipse at 63% 27%,#1d1914 0 3px,#e8dfce 4px 12px,transparent 13px),
+radial-gradient(ellipse at 50% 48%,#fffdf5 0 24%,#e7e2d8 43%,#c9c5bc 68%,#989994 100%);
+box-shadow:inset 10px -5px 22px rgba(50,50,48,.18),inset -10px -5px 22px rgba(50,50,48,.14)}
+.owl-body:before,.owl-body:after{content:"";position:absolute;top:4px;width:31px;height:39px;background:linear-gradient(145deg,#d9d5cb,#f7f3e9 60%,#aaa9a4);clip-path:polygon(50% 0,100% 100%,0 82%);z-index:-1}
+.owl-body:before{left:7px;transform:rotate(-17deg)}.owl-body:after{right:7px;transform:scaleX(-1) rotate(-17deg)}
+.owl-eye{position:absolute;top:38px;width:10px;height:10px;border-radius:50%;background:#17130d;border:3px solid #c5a34e;box-shadow:0 0 0 2px #eee6d7}
+.owl-eye.e1{left:29px}.owl-eye.e2{right:29px}
+.owl-body i:after{content:"";position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;left:1px;top:1px}
+.owl-body:after{}
+.scenery-owl:after{content:"";position:absolute;left:38px;bottom:-4px;width:48px;height:8px;border-radius:50%;background:#090705;filter:blur(4px);opacity:.8}
+.scenery-owl{animation:sceneryOwlBreath 7s ease-in-out infinite}
+@keyframes sceneryOwlBreath{0%,100%{translate:0 0}48%{translate:0 -2px}52%{translate:0 -2px;rotate:-1deg}}
+
+.enchanted-branch-divider{position:relative;width:min(1320px,96vw);height:126px;margin:-28px auto 8px;z-index:8;pointer-events:none;filter:drop-shadow(0 10px 9px #000a)}
+.branch-main{position:absolute;left:1%;right:1%;top:57px;height:17px;border-radius:70% 35% 60% 45%;background:
+linear-gradient(180deg,#60432a 0%,#382416 42%,#1c120c 100%);
+transform:rotate(-.45deg);box-shadow:inset 0 2px rgba(176,130,77,.22),inset 0 -4px #100a07}
+.branch-main:before{content:"";position:absolute;inset:3px 4% auto 2%;height:2px;border-radius:50%;background:linear-gradient(90deg,transparent,#98704a55,transparent 85%)}
+.twig{position:absolute;height:7px;background:linear-gradient(#4a321f,#21150d);border-radius:999px;transform-origin:left center}
+.twig.t1{left:13%;top:58px;width:130px;transform:rotate(-27deg)}.twig.t2{left:38%;top:61px;width:105px;transform:rotate(25deg)}
+.twig.t3{right:25%;top:59px;width:120px;transform:rotate(-31deg)}.twig.t4{right:8%;top:63px;width:92px;transform:rotate(28deg)}
+.leaf{position:absolute;width:25px;height:12px;border-radius:100% 0 100% 0;background:linear-gradient(135deg,#4f6444,#253522 70%);box-shadow:inset 0 1px #80906c55}
+.leaf.l1{left:10%;top:30px;rotate:-25deg}.leaf.l2{left:18%;top:22px;rotate:19deg}.leaf.l3{left:32%;top:74px;rotate:155deg}.leaf.l4{left:44%;top:85px;rotate:190deg}
+.leaf.l5{right:34%;top:23px;rotate:-18deg}.leaf.l6{right:25%;top:34px;rotate:35deg}.leaf.l7{right:14%;top:82px;rotate:170deg}.leaf.l8{right:5%;top:87px;rotate:205deg}
+.branch-spark{position:absolute;color:#d9c183;text-shadow:0 0 10px #d9c18388;animation:branchTwinkle 4s ease-in-out infinite}
+.bs1{left:27%;top:35px}.bs2{left:58%;top:78px;animation-delay:-1.4s}.bs3{right:19%;top:27px;animation-delay:-2.8s}
+@keyframes branchTwinkle{0%,100%{opacity:.12;scale:.7}50%{opacity:.75;scale:1.1}}
+@media(max-width:700px){.scenery-owl{width:78px;height:102px;right:1%;bottom:12px}.owl-eye{top:25px;scale:.75}.owl-eye.e1{left:17px}.owl-eye.e2{right:17px}.enchanted-branch-divider{height:82px;margin:-16px auto 4px}.branch-main{top:39px;height:12px}.twig{scale:.72}.leaf{scale:.75}}
+@media(prefers-reduced-motion:reduce){.scenery-owl,.branch-spark{animation:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -707,8 +743,9 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <section class="hero">
   <div class="arch">
-    <div class="hero-owl hero-owl-left" aria-hidden="true">🦉</div>
-    <div class="hero-owl hero-owl-right" aria-hidden="true">🦉</div>
+    <div class="scenery-owl" aria-hidden="true">
+      <div class="owl-body"><i class="owl-eye e1"></i><i class="owl-eye e2"></i></div>
+    </div>
     <div class="kicker">Mihaela's private collection</div>
     <div class="title-wrap">
       <span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span><span class="spark s4">✧</span>
@@ -759,6 +796,13 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     </div>
   </div>
 </section>
+<div class="enchanted-branch-divider" aria-hidden="true">
+  <div class="branch-main"></div>
+  <i class="twig t1"></i><i class="twig t2"></i><i class="twig t3"></i><i class="twig t4"></i>
+  <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span><span class="leaf l4"></span>
+  <span class="leaf l5"></span><span class="leaf l6"></span><span class="leaf l7"></span><span class="leaf l8"></span>
+  <span class="branch-spark bs1">✦</span><span class="branch-spark bs2">·</span><span class="branch-spark bs3">✧</span>
+</div>
 
 <main class="library">
   <div class="section-head">
@@ -1298,7 +1342,6 @@ const soundtrack=[
   {src:'assets/alex-morgan-fantasy-adventure-quest-537478.mp3',title:'Fantasy Adventure Quest'},
   {src:'assets/alex-morgan-flute-meadow-breeze-melody-578506.mp3',title:'Flute Meadow Breeze'},
   {src:'assets/kaazoom-beneath-the-whispering-pines-ethereal-elf-choir-363285.mp3',title:'Beneath the Whispering Pines'},
-  {src:'assets/kaazoom-this-is-our-home-fantasy-elven-song-choir-female-lead-vocal-486861.mp3',title:'This Is Our Home'},
   {src:'assets/luis_humanoide-middle-earth-fantasy-music-inspired-by-lord-of-the-rings-261464.mp3',title:'Middle Earth'}
 ];
 let soundtrackIndex=0;
