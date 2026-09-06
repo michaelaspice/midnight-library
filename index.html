@@ -247,7 +247,7 @@ animation:titleShimmer 6s linear infinite}
   </div>
 </main>
 
-<input class="local-upload" id="privateBookInput" type="file" accept=".epub,application/epub+zip">
+<input class="local-upload" id="privateBookInput" type="file" accept=".epub,.pdf,application/epub+zip,application/pdf">
 <div class="auth-panel" id="authPanel">
   <div class="auth-card">
     <div class="kicker">Private collection</div>
@@ -262,9 +262,9 @@ animation:titleShimmer 6s linear infinite}
 <div class="librarian" id="librarian">
  <div class="librarian-card">
   <div class="kicker">Private collection</div><h3 style="font-size:36px">Librarian's Desk</h3>
-  <p style="color:var(--muted);line-height:1.55">Choose many EPUBs at once. Midnight Library matches filenames to the catalogue, then stores matched copies in your private vault.</p>
-  <div class="import-actions"><button class="icon-btn" id="chooseBatch">Choose EPUBs</button><button class="icon-btn" id="importBatch" disabled>Import matched books</button><button class="icon-btn" id="closeLibrarian">Close</button></div>
-  <input class="local-upload" id="batchInput" type="file" accept=".epub,application/epub+zip" multiple>
+  <p style="color:var(--muted);line-height:1.55">Choose EPUBs and PDFs at once. Midnight Library matches filenames to the catalogue, then stores matched copies in your private vault.</p>
+  <div class="import-actions"><button class="icon-btn" id="chooseBatch">Choose books</button><button class="icon-btn" id="importBatch" disabled>Import matched books</button><button class="icon-btn" id="closeLibrarian">Close</button></div>
+  <input class="local-upload" id="batchInput" type="file" accept=".epub,.pdf,application/epub+zip,application/pdf" multiple>
   <div id="batchSummary" class="upload-status"></div><div class="import-progress"><div id="importBar"></div></div><div id="matchList" class="match-list"></div>
   <hr style="border:0;border-top:1px solid #493925;margin:26px 0">
   <div class="kicker">Shared access</div><h3 style="font-size:28px;margin-top:4px">Invite a friend</h3>
@@ -375,10 +375,13 @@ function openBook(b){
   document.getElementById('readerAuthor').textContent=b.author+' · '+b.collection+' · '+b.format;
   syncReaderButtons();
 
-  if((b.format||'').toUpperCase()==='EPUB'){
+  const fmt=(b.format||'').toUpperCase();
+  if(fmt==='EPUB'){
     openPrivateEpub(b);
+  }else if(fmt==='PDF'){
+    openPrivatePdf(b);
   }else{
-    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📄</div><h3>'+b.title+'</h3><p>This title is catalogued as '+b.format+'. EPUB cloud reading is enabled first; DOC/PDF support comes next.</p></div></div>';
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📄</div><h3>'+b.title+'</h3><p>This title is catalogued as '+b.format+'. This format is not yet supported in the cloud reader.</p></div></div>';
   }
 }
 
@@ -408,12 +411,37 @@ async function openPrivateEpub(b){
 }
 
 
-let epubBook=null, epubRendition=null;
+let epubBook=null, epubRendition=null, pdfObjectUrl=null;
 
 function destroyEpub(){
   try{ if(epubRendition) epubRendition.destroy(); }catch(e){}
   try{ if(epubBook) epubBook.destroy(); }catch(e){}
   epubRendition=null; epubBook=null;
+}
+function destroyPdf(){
+  if(pdfObjectUrl){ try{URL.revokeObjectURL(pdfObjectUrl)}catch(e){} }
+  pdfObjectUrl=null;
+}
+async function openPrivatePdf(b){
+  if(!sessionUser){
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">🔐</div><h3>'+b.title+'</h3><p>Unlock your private library first. After that, books stored in the vault open with one click.</p><button class="icon-btn" id="unlockHere">Unlock library</button></div></div>';
+    document.getElementById('unlockHere').onclick=()=>openAuth();
+    return;
+  }
+  if(!ownerAccess){
+    readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">🗝️</div><h3>Private collection</h3><p>This account is not authorized to read the private collection.</p></div></div>';
+    return;
+  }
+  readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">⌛</div><h3>Opening '+b.title+'</h3><p>Checking the private vault…</p></div></div>';
+  const {data,error}=await supa.storage.from('midnight-books').download(b.storagePath);
+  if(!error && data){
+    destroyPdf();
+    pdfObjectUrl=URL.createObjectURL(data);
+    readerBody.innerHTML='<iframe title="'+b.title.replace(/"/g,'&quot;')+'" src="'+pdfObjectUrl+'#view=FitH"></iframe>';
+    return;
+  }
+  readerBody.innerHTML='<div class="placeholder"><div class="placeholder-inner"><div style="font-size:58px">📚</div><h3>'+b.title+'</h3><p>This volume is catalogued but its private copy has not been added to the vault yet.</p><button class="icon-btn" id="addPrivateCopy">Add my private copy once</button><p><small>After this one-time upload, clicking the book opens it directly on any device where you are signed in.</small></p><div class="upload-status" id="bookUploadStatus"></div></div></div>';
+  document.getElementById('addPrivateCopy').onclick=()=>{pendingUploadBook=b;document.getElementById('privateBookInput').click();};
 }
 
 async function loadEpubArrayBuffer(buf){
@@ -484,13 +512,17 @@ document.getElementById('privateBookInput').addEventListener('change',async e=>{
   const b=pendingUploadBook;
   if(!file||!b) return;
   const status=document.getElementById('bookUploadStatus');
-  if(!file.name.toLowerCase().endsWith('.epub')){ if(status)status.textContent='Please choose an EPUB file.'; return; }
+  const fmt=(b.format||'').toUpperCase();
+  const ok=fmt==='EPUB'?file.name.toLowerCase().endsWith('.epub'):fmt==='PDF'?file.name.toLowerCase().endsWith('.pdf'):false;
+  if(!ok){ if(status)status.textContent='Please choose the matching '+fmt+' file.'; return; }
   if(status)status.textContent='Encrypting the door… uploading private copy.';
-  const {error}=await supa.storage.from('midnight-books').upload(b.storagePath,file,{contentType:'application/epub+zip',upsert:true});
+  const contentType=fmt==='PDF'?'application/pdf':'application/epub+zip';
+  const {error}=await supa.storage.from('midnight-books').upload(b.storagePath,file,{contentType,upsert:true});
   if(error){ if(status)status.textContent='Upload failed: '+error.message; return; }
   if(status)status.textContent='Added to the private vault. Opening…';
   pendingUploadBook=null;
-  await loadEpubArrayBuffer(await file.arrayBuffer());
+  if(fmt==='EPUB') await loadEpubArrayBuffer(await file.arrayBuffer());
+  else await openPrivatePdf(b);
   e.target.value='';
 });
 
@@ -522,7 +554,7 @@ const normalizeName=s=>s.toLowerCase()
  .replace(/\s+/g,' ').trim();
 
 function scoreFileToBook(file,b){
-  const f=normalizeName(file.name.replace(/\.epub$/i,''));
+  const f=normalizeName(file.name.replace(/\.(epub|pdf)$/i,''));
   const t=normalizeName(b.title);
   if(!f||!t)return 0;
   if(f.includes(t)||t.includes(f))return 100;
@@ -534,7 +566,7 @@ function matchBatch(files){
   const used=new Set(); batchMatches=[];
   [...files].forEach(file=>{
     let best=null,bestScore=0;
-    books.filter(b=>(b.format||'').toUpperCase()==='EPUB').forEach(b=>{
+    books.filter(b=>['EPUB','PDF'].includes((b.format||'').toUpperCase())).forEach(b=>{
       if(used.has(b.id))return;
       const s=scoreFileToBook(file,b);
       if(s>bestScore){best=b;bestScore=s}
@@ -565,7 +597,9 @@ document.getElementById('importBatch').onclick=async()=>{
   for(let i=0;i<todo.length;i++){
     const x=todo[i];
     document.getElementById('batchSummary').textContent='Importing '+(i+1)+' of '+todo.length+': '+x.book.title;
-    const {error}=await supa.storage.from('midnight-books').upload(x.book.storagePath,x.file,{contentType:'application/epub+zip',upsert:true});
+    const fmt=(x.book.format||'').toUpperCase();
+    const contentType=fmt==='PDF'?'application/pdf':'application/epub+zip';
+    const {error}=await supa.storage.from('midnight-books').upload(x.book.storagePath,x.file,{contentType,upsert:true});
     x.status=error?'error':'done'; if(error)x.error=error.message;
     document.getElementById('importBar').style.width=Math.round((i+1)/todo.length*100)+'%';
     renderBatch();
