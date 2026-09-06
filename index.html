@@ -577,7 +577,7 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
         </button>
         <div class="volume-control">
           <span class="volume-icon">🔈</span>
-          <input id="volumeSlider" type="range" min="0" max="100" value="18" aria-label="Soundtrack volume">
+          <input id="volumeSlider" type="range" min="0" max="100" value="100" aria-label="Soundtrack volume">
           <span class="volume-icon">🔊</span>
         </div>
         <div class="track-controls">
@@ -1119,10 +1119,10 @@ let soundtrackIndex=0;
 const prevTrack=document.getElementById('prevTrack');
 const nextTrack=document.getElementById('nextTrack');
 const trackTitle=document.getElementById('trackTitle');
-const savedVolume=Number(localStorage.getItem('midnight-volume'));
-const initialVolume=Number.isFinite(savedVolume)&&savedVolume>=0&&savedVolume<=1?savedVolume:.18;
+const initialVolume=1;
 libraryMusic.volume=initialVolume;
-volumeSlider.value=Math.round(initialVolume*100);
+volumeSlider.value=100;
+localStorage.setItem('midnight-volume','1');
 function paintVolume(){
   const v=Number(volumeSlider.value);
   volumeSlider.style.background='linear-gradient(90deg,#c6a15b 0 '+v+'%,#3a3024 '+v+'% 100%)';
