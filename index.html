@@ -927,6 +927,58 @@ body:after{
   text-shadow:0 0 10px rgba(198,161,91,.45);
 }
 
+
+/* Owl now crowns The Midnight Library title card */
+.arch{position:relative}
+.owl-title-perch.scenery-owl{
+  left:50%!important;
+  right:auto!important;
+  top:-150px!important;
+  bottom:auto!important;
+  width:150px!important;
+  height:190px!important;
+  transform:translateX(-50%)!important;
+  z-index:15!important;
+  animation:owlCrownBreath 8s ease-in-out infinite!important;
+  overflow:visible;
+}
+.owl-title-perch .owl-wing{
+  position:absolute;
+  top:48px;
+  width:145px;
+  height:76px;
+  z-index:-1;
+  background:
+    repeating-linear-gradient(12deg,rgba(112,105,94,.5) 0 3px,transparent 3px 10px),
+    linear-gradient(180deg,#e9e5dc,#c8c3b8 62%,#96938b);
+  filter:drop-shadow(0 8px 7px rgba(0,0,0,.55));
+}
+.owl-title-perch .owl-wing-left{
+  right:62%;
+  border-radius:95% 10% 72% 15%;
+  clip-path:polygon(100% 35%,82% 14%,58% 4%,31% 8%,4% 30%,28% 43%,5% 62%,36% 65%,15% 86%,52% 77%,77% 88%,92% 66%);
+  transform:rotate(10deg);
+  transform-origin:100% 55%;
+}
+.owl-title-perch .owl-wing-right{
+  left:62%;
+  border-radius:10% 95% 15% 72%;
+  clip-path:polygon(0 35%,18% 14%,42% 4%,69% 8%,96% 30%,72% 43%,95% 62%,64% 65%,85% 86%,48% 77%,23% 88%,8% 66%);
+  transform:rotate(-10deg);
+  transform-origin:0 55%;
+}
+@keyframes owlCrownBreath{
+  0%,100%{translate:0 0}
+  50%{translate:0 -2px}
+}
+/* The divider is scenery only now; remove the owl-specific stub branch */
+.enchanted-branch-divider:before,
+.enchanted-branch-divider:after{content:none!important}
+@media(max-width:700px){
+ .owl-title-perch.scenery-owl{top:-92px!important;width:92px!important;height:118px!important}
+ .owl-title-perch .owl-wing{top:30px;width:88px;height:48px}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -983,7 +1035,8 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <section class="hero">
   <div class="arch">
-    <div class="scenery-owl" aria-hidden="true">
+    <div class="scenery-owl owl-title-perch" aria-hidden="true">
+  <span class="owl-wing owl-wing-left"></span><span class="owl-wing owl-wing-right"></span>
   <svg viewBox="0 0 220 280" role="img" aria-label="">
     <defs>
       <radialGradient id="owlBodyGrad" cx="48%" cy="35%" r="70%">
