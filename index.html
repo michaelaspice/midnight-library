@@ -631,10 +631,8 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 
 <div class="morpheus" id="morpheus" aria-hidden="true">🐈‍⬛</div>
 
-<audio id="libraryMusic" preload="auto" loop>
-  <source src="assets/alex-morgan-fantasy-adventure-quest-537478.mp3" type="audio/mpeg">
-</audio>
-<footer>📚 The Midnight Library · built for late nights, good books and one occasionally passing cat.<br><small>Music: “Fantasy Adventure Quest” by alex-morgan · Pixabay</small></footer>
+<audio id="libraryMusic" preload="auto"></audio>
+<footer>📚 The Midnight Library · built for late nights, good books and one occasionally passing cat.<br><small>Soundtrack selections from Pixabay</small></footer>
 
 <script src="catalog.js"></script>
 <script>
@@ -1074,36 +1072,56 @@ setInterval(()=>{if(Math.random()>.45)morpheusWalk()},45000);
 const libraryMusic=document.getElementById('libraryMusic');
 const soundToggle=document.getElementById('soundToggle');
 const soundError=document.getElementById('soundError');
+
+const soundtrack=[
+  'assets/alex-morgan-fantasy-adventure-quest-537478.mp3',
+  'assets/40173586-magical-wizard-school-orchestral-fantasy-488126.mp3',
+  'assets/alex-morgan-flute-meadow-breeze-melody-578506.mp3'
+];
+let soundtrackIndex=0;
 libraryMusic.volume=.18;
 
+function loadSoundtrack(index){
+  soundtrackIndex=(index+soundtrack.length)%soundtrack.length;
+  libraryMusic.src=soundtrack[soundtrackIndex];
+  libraryMusic.load();
+}
 function updateSoundUI(on){
   soundToggle.setAttribute('aria-checked',on?'true':'false');
   soundToggle.setAttribute('aria-label',on?'Turn library soundtrack off':'Turn library soundtrack on');
 }
-soundToggle.addEventListener('click',async()=>{
+async function playSoundtrack(){
   soundError.classList.remove('show');
+  if(!libraryMusic.src) loadSoundtrack(soundtrackIndex);
+  try{
+    await libraryMusic.play();
+    localStorage.setItem('midnight-music','on');
+    updateSoundUI(true);
+  }catch(err){
+    updateSoundUI(false);
+    soundError.textContent='The soundtrack could not start. Refresh once and try ON again.';
+    soundError.classList.add('show');
+  }
+}
+soundToggle.addEventListener('click',async()=>{
   if(libraryMusic.paused){
-    try{
-      libraryMusic.currentTime=libraryMusic.currentTime||0;
-      await libraryMusic.play();
-      localStorage.setItem('midnight-music','on');
-      updateSoundUI(true);
-    }catch(err){
-      updateSoundUI(false);
-      soundError.textContent='The soundtrack could not start. Refresh once and try ON again.';
-      soundError.classList.add('show');
-    }
+    await playSoundtrack();
   }else{
     libraryMusic.pause();
     localStorage.setItem('midnight-music','off');
     updateSoundUI(false);
   }
 });
+libraryMusic.addEventListener('ended',async()=>{
+  loadSoundtrack(soundtrackIndex+1);
+  await playSoundtrack();
+});
 libraryMusic.addEventListener('error',()=>{
   updateSoundUI(false);
-  soundError.textContent='The soundtrack file could not be loaded.';
+  soundError.textContent='One soundtrack file could not be loaded.';
   soundError.classList.add('show');
 });
+loadSoundtrack(0);
 updateSoundUI(false);
 
 renderWings();
