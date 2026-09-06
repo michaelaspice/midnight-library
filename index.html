@@ -480,65 +480,38 @@ animation:titleShimmer 6s linear infinite}
   border-right-color:#0b0908 !important;
 }
 
-#soundBtn.sound-on{border-color:var(--gold);color:#f4dfad;box-shadow:0 0 18px rgba(198,161,91,.16)}
 footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
+
+.sound-experience{
+  width:min(520px,92%);margin:20px auto 24px;padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  border:1px solid rgba(198,161,91,.34);border-radius:16px;
+  background:linear-gradient(180deg,rgba(20,15,11,.92),rgba(10,8,7,.9));
+  box-shadow:0 12px 30px #0005,inset 0 1px rgba(255,235,190,.04)
+}
+.sound-copy{display:flex;align-items:center;gap:11px;text-align:left}
+.sound-copy strong{display:block;font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--ink)}
+.sound-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px}
+.sound-note{font-size:25px;color:var(--gold2);filter:drop-shadow(0 0 8px rgba(224,184,103,.3))}
+.sound-switch{
+  position:relative;width:128px;height:42px;border-radius:999px;border:1px solid #725a3c;
+  background:#120e0b;color:#8f816e;cursor:pointer;display:grid;grid-template-columns:1fr 34px 1fr;
+  align-items:center;padding:0 9px;transition:.25s ease
+}
+.sound-switch[aria-checked="true"]{background:#3b2b14;border-color:#c6a15b;color:#f4dfad;box-shadow:0 0 18px rgba(198,161,91,.16)}
+.sound-state{font-size:10px;font-weight:800;letter-spacing:.12em;z-index:2}
+.sound-state.off{text-align:left}.sound-state.on{text-align:right}
+.sound-knob{
+  width:28px;height:28px;border-radius:50%;background:#d7c7ab;border:1px solid #f1e1bf;
+  box-shadow:0 3px 8px #0008;transform:translateX(-30px);transition:.25s ease;justify-self:center
+}
+.sound-switch[aria-checked="true"] .sound-knob{transform:translateX(30px);background:#f0ce82}
+.sound-error{flex-basis:100%;display:none;color:#d9897f;font-size:12px;text-align:left}
+.sound-error.show{display:block}
+@media(max-width:560px){.sound-experience{justify-content:center}.sound-copy{width:100%;justify-content:center;text-align:center}.sound-switch{margin:auto}}
+
 </style>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js">
-const libraryMusic=document.getElementById('libraryMusic');
-const soundBtn=document.getElementById('soundBtn');
-let musicStarted=false;
-libraryMusic.volume=0;
-
-function setSoundButton(){
-  const on=musicStarted && !libraryMusic.paused && !libraryMusic.muted;
-  soundBtn.classList.toggle('sound-on',on);
-  soundBtn.textContent=on?'♫ Sound on':'♪ Sound';
-}
-
-async function fadeMusicIn(){
-  if(localStorage.getItem('midnight-music-muted')==='1') return;
-  try{
-    libraryMusic.muted=false;
-    libraryMusic.volume=0;
-    await libraryMusic.play();
-    musicStarted=true;
-    setSoundButton();
-    let v=0;
-    const fade=setInterval(()=>{
-      v=Math.min(.18,v+.015);
-      libraryMusic.volume=v;
-      if(v>=.18)clearInterval(fade);
-    },120);
-  }catch(e){}
-}
-
-function unlockSoundOnce(){
-  fadeMusicIn();
-  document.removeEventListener('pointerdown',unlockSoundOnce);
-  document.removeEventListener('keydown',unlockSoundOnce);
-}
-document.addEventListener('pointerdown',unlockSoundOnce,{once:true});
-document.addEventListener('keydown',unlockSoundOnce,{once:true});
-
-soundBtn.addEventListener('click',async e=>{
-  e.stopPropagation();
-  if(!musicStarted || libraryMusic.paused || libraryMusic.muted){
-    localStorage.removeItem('midnight-music-muted');
-    try{
-      libraryMusic.muted=false;
-      libraryMusic.volume=.18;
-      await libraryMusic.play();
-      musicStarted=true;
-    }catch(err){}
-  }else{
-    libraryMusic.pause();
-    localStorage.setItem('midnight-music-muted','1');
-  }
-  setSoundButton();
-});
-setSoundButton();
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -554,7 +527,6 @@ setSoundButton();
     <button class="icon-btn" id="authBtn">🔐 Enter library</button>
 <button class="icon-btn" id="librarianBtn" style="display:none">📚 Librarian</button>
 <button class="icon-btn" id="randomBtn" title="Choose a random book">🎲 Surprise me</button>
-<button class="icon-btn" id="soundBtn" title="Toggle library soundtrack">♪ Sound</button>
   </div>
 </header>
 
@@ -568,6 +540,18 @@ setSoundButton();
       <h1><span>The Midnight Library</span></h1>
     </div>
     <p>A quiet place for books worth keeping. Search the shelves, mark what you've read, save favourites, and return to the page where you left off.</p>
+    <div class="sound-experience" id="soundExperience">
+      <div class="sound-copy">
+        <span class="sound-note">♪</span>
+        <div><strong>Library soundtrack</strong><small>Sound on for the full experience</small></div>
+      </div>
+      <button class="sound-switch" id="soundToggle" type="button" role="switch" aria-checked="false" aria-label="Turn library soundtrack on">
+        <span class="sound-state off">OFF</span>
+        <span class="sound-knob"></span>
+        <span class="sound-state on">ON</span>
+      </button>
+      <div class="sound-error" id="soundError" aria-live="polite"></div>
+    </div>
     <div class="search-wrap">
       <input id="search" type="search" placeholder="What are you looking for tonight?" autocomplete="off">
       <span>⌕</span>
@@ -1085,6 +1069,42 @@ function morpheusWalk(){
 }
 setTimeout(morpheusWalk,9000);
 setInterval(()=>{if(Math.random()>.45)morpheusWalk()},45000);
+
+
+const libraryMusic=document.getElementById('libraryMusic');
+const soundToggle=document.getElementById('soundToggle');
+const soundError=document.getElementById('soundError');
+libraryMusic.volume=.18;
+
+function updateSoundUI(on){
+  soundToggle.setAttribute('aria-checked',on?'true':'false');
+  soundToggle.setAttribute('aria-label',on?'Turn library soundtrack off':'Turn library soundtrack on');
+}
+soundToggle.addEventListener('click',async()=>{
+  soundError.classList.remove('show');
+  if(libraryMusic.paused){
+    try{
+      libraryMusic.currentTime=libraryMusic.currentTime||0;
+      await libraryMusic.play();
+      localStorage.setItem('midnight-music','on');
+      updateSoundUI(true);
+    }catch(err){
+      updateSoundUI(false);
+      soundError.textContent='The soundtrack could not start. Refresh once and try ON again.';
+      soundError.classList.add('show');
+    }
+  }else{
+    libraryMusic.pause();
+    localStorage.setItem('midnight-music','off');
+    updateSoundUI(false);
+  }
+});
+libraryMusic.addEventListener('error',()=>{
+  updateSoundUI(false);
+  soundError.textContent='The soundtrack file could not be loaded.';
+  soundError.classList.add('show');
+});
+updateSoundUI(false);
 
 renderWings();
 render();
