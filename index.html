@@ -496,7 +496,14 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
   box-shadow:0 12px 30px #0005,inset 0 1px rgba(255,235,190,.04)
 }
 .sound-copy{display:flex;align-items:center;justify-content:center;gap:11px;text-align:left;width:100%}
-.sound-copy strong{display:block;font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--ink)}
+.sound-copy strong{
+  display:inline-block;font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:600;
+  padding:0 .03em .08em;
+  background:linear-gradient(90deg,#ffe7bb 0%,#ffc67a 18%,#ff86cb 38%,#fff0c8 55%,#f5a7d7 72%,#ffd28e 88%,#fff0ce 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 5px #ffbf7d) drop-shadow(0 0 12px #f87bb644);
+  animation:titleShimmer 6s linear infinite
+}
 .sound-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px}
 .sound-copy-text{min-width:0}
 .playlist-picker{display:flex;align-items:center;gap:7px;margin-top:8px}
@@ -1285,7 +1292,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
       <div class="sound-copy">
         <span class="sound-note">♪</span>
         <div class="sound-copy-text">
-          <strong>Library soundtracks</strong>
+          <strong>Library Soundatracks</strong>
           <small>Sound on for the full experience</small>
           <div class="playlist-picker">
             <label for="playlistSelect">Atmosphere</label>
