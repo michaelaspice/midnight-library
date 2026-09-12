@@ -569,11 +569,11 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 @media(max-width:560px){.sound-controls{align-items:center;width:100%}.volume-control{width:min(240px,90%)}}
 
 
-.track-controls{display:grid;grid-template-columns:34px 34px minmax(118px,1fr) 34px;align-items:center;gap:7px;width:272px}
+.track-controls{display:grid;grid-template-columns:34px 34px 34px minmax(112px,1fr) 34px;align-items:center;gap:7px;width:314px}
 .track-nav{width:34px;height:30px;border-radius:8px;border:1px solid #725a3c;background:#17110d;color:#e7d2a1;cursor:pointer}
 .track-nav:hover{border-color:var(--gold);background:#21170f}
 .track-title{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
-@media(max-width:560px){.track-controls{width:min(300px,92vw);grid-template-columns:34px 34px minmax(105px,1fr) 34px}}
+@media(max-width:560px){.track-controls{width:min(335px,92vw);grid-template-columns:32px 32px 32px minmax(96px,1fr) 32px}.track-nav{width:32px}}
 
 
 /* Enchanted midnight-library atmosphere */
@@ -1314,6 +1314,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
         <div class="track-controls">
           <button class="track-nav" id="prevTrack" type="button" aria-label="Previous soundtrack">⏮</button>
           <button class="track-nav" id="pauseTrack" type="button" aria-label="Pause soundtrack">⏸</button>
+          <button class="track-nav" id="shuffleTrack" type="button" aria-label="Shuffle soundtrack">🔀</button>
           <span class="track-title" id="trackTitle">Fantasy Adventure Quest</span>
           <button class="track-nav" id="nextTrack" type="button" aria-label="Next soundtrack">⏭</button>
         </div>
@@ -2076,7 +2077,19 @@ const playlists={
     {src:'assets/atlasaudio-mysterious-581914.mp3',title:'Mysterious'},
     {src:'assets/universfield-mysterious-music-box-208295.mp3',title:'Mysterious Music Box'}
   ],
-  romantic:[]
+  romantic:[
+    {src:'assets/jumadiharyanto07-you-are-the-one-509445.mp3',title:'You Are The One'},
+    {src:'assets/paulyudin-love-485933.mp3',title:'Love'},
+    {src:'assets/kaazoom-on-a-summers-night-551020.mp3',title:"On a Summer's Night"},
+    {src:'assets/creators-audio-vault-the-reason-i-can-breathe-korean-romantic-k-pop-love-ballad-592063.mp3',title:'The Reason I Can Breathe'},
+    {src:'assets/sound4stock-synthwave-vocal-pop-love-song-464602.mp3',title:'Synthwave Love Song'},
+    {src:'assets/the_mountain-pop-vocal-246791.mp3',title:'Pop Vocal'},
+    {src:'assets/lnplusmusic-romantic-love-hopeful-music-336295.mp3',title:'Romantic Love'},
+    {src:'assets/nastelbom-love-466198.mp3',title:'Love'},
+    {src:'assets/leberch-love-595796.mp3',title:'Love'},
+    {src:'assets/paulyudin-love-love-music-573988.mp3',title:'Love Music'},
+    {src:'assets/tunetank-romantic-love-music-347511.mp3',title:'Romantic Piano'}
+  ]
 };
 let activePlaylist=localStorage.getItem('midnight-playlist')||'fantasy';
 if(!playlists[activePlaylist])activePlaylist='fantasy';
@@ -2086,6 +2099,7 @@ let soundtrackIndex=0;
 const prevTrack=document.getElementById('prevTrack');
 const nextTrack=document.getElementById('nextTrack');
 const pauseTrack=document.getElementById('pauseTrack');
+const shuffleTrack=document.getElementById('shuffleTrack');
 const trackTitle=document.getElementById('trackTitle');
 const savedVolume=Number(localStorage.getItem('midnight-volume'));
 const initialVolume=Number.isFinite(savedVolume)?savedVolume:1;
@@ -2178,6 +2192,19 @@ pauseTrack.addEventListener('click',async()=>{
     localStorage.setItem('midnight-music','off');
     updateSoundUI(false);
   }
+});
+shuffleTrack.addEventListener('click',async()=>{
+  if(!soundtrack.length)return;
+  const wasPlaying=!libraryMusic.paused;
+  let nextIndex=soundtrackIndex;
+  if(soundtrack.length>1){
+    while(nextIndex===soundtrackIndex){
+      nextIndex=Math.floor(Math.random()*soundtrack.length);
+    }
+  }
+  loadSoundtrack(nextIndex);
+  libraryMusic.currentTime=0;
+  if(wasPlaying)await playSoundtrack();
 });
 nextTrack.addEventListener('click',()=>changeTrack(1));
 libraryMusic.addEventListener('ended',async()=>{
