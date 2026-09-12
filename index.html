@@ -1261,6 +1261,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
         </div>
         <div class="track-controls">
           <button class="track-nav" id="prevTrack" type="button" aria-label="Previous soundtrack">⏮</button>
+          <button class="track-nav" id="pauseTrack" type="button" aria-label="Pause soundtrack">⏸</button>
           <span class="track-title" id="trackTitle">Fantasy Adventure Quest</span>
           <button class="track-nav" id="nextTrack" type="button" aria-label="Next soundtrack">⏭</button>
         </div>
@@ -2004,6 +2005,7 @@ let soundtrack=playlists[activePlaylist];
 let soundtrackIndex=0;
 const prevTrack=document.getElementById('prevTrack');
 const nextTrack=document.getElementById('nextTrack');
+const pauseTrack=document.getElementById('pauseTrack');
 const trackTitle=document.getElementById('trackTitle');
 const savedVolume=Number(localStorage.getItem('midnight-volume'));
 const initialVolume=Number.isFinite(savedVolume)?savedVolume:1;
@@ -2088,6 +2090,15 @@ async function changeTrack(step){
   if(wasPlaying) await playSoundtrack();
 }
 prevTrack.addEventListener('click',()=>changeTrack(-1));
+pauseTrack.addEventListener('click',async()=>{
+  if(libraryMusic.paused){
+    await playSoundtrack();
+  }else{
+    libraryMusic.pause();
+    localStorage.setItem('midnight-music','off');
+    updateSoundUI(false);
+  }
+});
 nextTrack.addEventListener('click',()=>changeTrack(1));
 libraryMusic.addEventListener('ended',async()=>{
   if(!soundtrack.length)return;
