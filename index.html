@@ -488,13 +488,13 @@ animation:titleShimmer 6s linear infinite}
 footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 
 .sound-experience{
-  width:min(520px,92%);margin:20px auto 24px;padding:14px 16px;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  width:min(640px,94%);margin:20px auto 24px;padding:16px 18px;
+  display:grid;grid-template-columns:1fr;align-items:center;justify-items:center;gap:14px;
   border:1px solid rgba(198,161,91,.34);border-radius:16px;
   background:linear-gradient(180deg,rgba(20,15,11,.92),rgba(10,8,7,.9));
   box-shadow:0 12px 30px #0005,inset 0 1px rgba(255,235,190,.04)
 }
-.sound-copy{display:flex;align-items:center;gap:11px;text-align:left}
+.sound-copy{display:flex;align-items:center;justify-content:center;gap:11px;text-align:left;width:100%}
 .sound-copy strong{display:block;font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--ink)}
 .sound-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px}
 .sound-copy-text{min-width:0}
@@ -520,12 +520,12 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
   box-shadow:0 3px 8px #0008;transform:translateX(-30px);transition:.25s ease;justify-self:center
 }
 .sound-switch[aria-checked="true"] .sound-knob{transform:translateX(30px);background:#f0ce82}
-.sound-error{flex-basis:100%;display:none;color:#d9897f;font-size:12px;text-align:left}
+.sound-error{width:100%;display:none;color:#d9897f;font-size:12px;text-align:center}
 .sound-error.show{display:block}
 @media(max-width:560px){.sound-experience{justify-content:center}.sound-copy{width:100%;justify-content:center;text-align:left}.sound-copy-text{width:min(270px,78vw)}.playlist-picker{align-items:flex-start;flex-direction:column;gap:4px}.playlist-picker select{width:100%;max-width:none}.sound-switch{margin:auto}}
 
 
-.sound-controls{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.sound-controls{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
 .volume-control{display:flex;align-items:center;gap:8px;width:190px}
 .volume-control input[type="range"]{
   -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;
