@@ -488,7 +488,8 @@ animation:titleShimmer 6s linear infinite}
 footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 
 .sound-experience{
-  width:min(640px,94%);margin:20px auto 24px;padding:16px 18px;
+  position:relative;overflow:hidden;isolation:isolate;
+  width:min(640px,94%);margin:20px auto 24px;padding:26px 24px 24px;
   display:grid;grid-template-columns:1fr;align-items:center;justify-items:center;gap:14px;
   border:1px solid rgba(198,161,91,.34);border-radius:16px;
   background:linear-gradient(180deg,rgba(20,15,11,.92),rgba(10,8,7,.9));
@@ -522,6 +523,32 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 .sound-switch[aria-checked="true"] .sound-knob{transform:translateX(30px);background:#f0ce82}
 .sound-error{width:100%;display:none;color:#d9897f;font-size:12px;text-align:center}
 .sound-error.show{display:block}
+.sound-experience > *:not(.sound-magic){position:relative;z-index:2}
+.sound-magic{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.sound-star,.sound-float-note{position:absolute;color:#e7c77d;text-shadow:0 0 9px rgba(231,199,125,.72);opacity:.62}
+.sound-star{font-size:12px;animation:soundTwinkle 3.8s ease-in-out infinite}
+.ss1{left:7%;top:18%;animation-delay:-.4s}.ss2{right:9%;top:19%;animation-delay:-1.7s}
+.ss3{left:14%;bottom:14%;animation-delay:-2.5s}.ss4{right:16%;bottom:18%;font-size:18px;animation-delay:-.9s}
+.sound-firefly{position:absolute;width:5px;height:5px;border-radius:50%;background:#f0ce82;box-shadow:0 0 6px #f0ce82,0 0 15px rgba(240,206,130,.75);opacity:.72;animation:soundFirefly 8s ease-in-out infinite}
+.sf1{left:6%;top:58%;animation-delay:-1s}.sf2{left:36%;top:10%;animation-delay:-4.5s}
+.sf3{right:8%;top:54%;animation-delay:-2.8s}.sf4{right:31%;bottom:8%;animation-delay:-6.2s}
+.sound-float-note{font-size:15px;animation:soundNoteFloat 7s ease-in-out infinite}
+.sn1{left:4%;top:34%;animation-delay:-1.5s}.sn2{right:5%;top:34%;animation-delay:-4s}.sn3{right:21%;bottom:9%;animation-delay:-2.2s}
+@keyframes soundTwinkle{0%,100%{opacity:.2;transform:scale(.78) rotate(0)}50%{opacity:.9;transform:scale(1.18) rotate(12deg)}}
+@keyframes soundFirefly{
+  0%,100%{transform:translate3d(0,0,0) scale(.75);opacity:.25}
+  25%{transform:translate3d(14px,-10px,0) scale(1);opacity:.85}
+  50%{transform:translate3d(3px,-22px,0) scale(.85);opacity:.48}
+  75%{transform:translate3d(-12px,-9px,0) scale(1.1);opacity:.9}
+}
+@keyframes soundNoteFloat{
+  0%,100%{transform:translateY(7px) rotate(-8deg);opacity:.18}
+  50%{transform:translateY(-11px) rotate(8deg);opacity:.7}
+}
+@media(prefers-reduced-motion:reduce){
+  .sound-star,.sound-firefly,.sound-float-note{animation:none!important}
+}
+
 @media(max-width:560px){.sound-experience{justify-content:center}.sound-copy{width:100%;justify-content:center;text-align:left}.sound-copy-text{width:min(270px,78vw)}.playlist-picker{align-items:flex-start;flex-direction:column;gap:4px}.playlist-picker select{width:100%;max-width:none}.sound-switch{margin:auto}}
 
 
@@ -1242,6 +1269,19 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     </div>
     <p>A quiet place for books worth keeping. Search the shelves, mark what you've read, save favourites, and return to the page where you left off.</p>
     <div class="sound-experience" id="soundExperience">
+      <div class="sound-magic" aria-hidden="true">
+        <span class="sound-star ss1">✦</span>
+        <span class="sound-star ss2">✧</span>
+        <span class="sound-star ss3">✦</span>
+        <span class="sound-star ss4">·</span>
+        <span class="sound-firefly sf1"></span>
+        <span class="sound-firefly sf2"></span>
+        <span class="sound-firefly sf3"></span>
+        <span class="sound-firefly sf4"></span>
+        <span class="sound-float-note sn1">♪</span>
+        <span class="sound-float-note sn2">♫</span>
+        <span class="sound-float-note sn3">♪</span>
+      </div>
       <div class="sound-copy">
         <span class="sound-note">♪</span>
         <div class="sound-copy-text">
