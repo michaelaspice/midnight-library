@@ -497,6 +497,15 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 .sound-copy{display:flex;align-items:center;gap:11px;text-align:left}
 .sound-copy strong{display:block;font-family:"Cormorant Garamond",serif;font-size:20px;color:var(--ink)}
 .sound-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px}
+.sound-copy-text{min-width:0}
+.playlist-picker{display:flex;align-items:center;gap:7px;margin-top:8px}
+.playlist-picker label{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.playlist-picker select{
+  min-width:0;max-width:190px;padding:6px 28px 6px 10px;border:1px solid #5d4931;border-radius:8px;
+  background:#17120f;color:#e8d8b0;font:inherit;font-size:11px;outline:none;cursor:pointer
+}
+.playlist-picker select:focus{border-color:var(--gold)}
+
 .sound-note{font-size:25px;color:var(--gold2);filter:drop-shadow(0 0 8px rgba(224,184,103,.3))}
 .sound-switch{
   position:relative;width:128px;height:42px;border-radius:999px;border:1px solid #725a3c;
@@ -513,7 +522,7 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 .sound-switch[aria-checked="true"] .sound-knob{transform:translateX(30px);background:#f0ce82}
 .sound-error{flex-basis:100%;display:none;color:#d9897f;font-size:12px;text-align:left}
 .sound-error.show{display:block}
-@media(max-width:560px){.sound-experience{justify-content:center}.sound-copy{width:100%;justify-content:center;text-align:center}.sound-switch{margin:auto}}
+@media(max-width:560px){.sound-experience{justify-content:center}.sound-copy{width:100%;justify-content:center;text-align:left}.sound-copy-text{width:min(270px,78vw)}.playlist-picker{align-items:flex-start;flex-direction:column;gap:4px}.playlist-picker select{width:100%;max-width:none}.sound-switch{margin:auto}}
 
 
 .sound-controls{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
@@ -533,11 +542,11 @@ footer small{display:inline-block;margin-top:7px;opacity:.6;font-size:11px}
 @media(max-width:560px){.sound-controls{align-items:center;width:100%}.volume-control{width:min(240px,90%)}}
 
 
-.track-controls{display:grid;grid-template-columns:34px minmax(120px,1fr) 34px;align-items:center;gap:8px;width:240px}
+.track-controls{display:grid;grid-template-columns:34px 34px minmax(118px,1fr) 34px;align-items:center;gap:7px;width:272px}
 .track-nav{width:34px;height:30px;border-radius:8px;border:1px solid #725a3c;background:#17110d;color:#e7d2a1;cursor:pointer}
 .track-nav:hover{border-color:var(--gold);background:#21170f}
 .track-title{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
-@media(max-width:560px){.track-controls{width:min(260px,92vw)}}
+@media(max-width:560px){.track-controls{width:min(300px,92vw);grid-template-columns:34px 34px minmax(105px,1fr) 34px}}
 
 
 /* Enchanted midnight-library atmosphere */
@@ -1235,18 +1244,21 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     <div class="sound-experience" id="soundExperience">
       <div class="sound-copy">
         <span class="sound-note">♪</span>
-        <div><strong>Library soundtrack</strong><small>Sound on for the full experience</small></div>
-      </div>
-      <div class="playlist-picker" style="margin:8px 0 12px">
-        <label for="playlistSelect" style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.72;margin-right:8px">Atmosphere</label>
-        <select id="playlistSelect" aria-label="Choose library atmosphere" style="background:#17120f;color:#e8d8b0;border:1px solid #5d4931;border-radius:999px;padding:7px 12px;font:inherit">
-          <option value="fantasy">Fantasy &amp; Epic</option>
-          <option value="focused">Focused Reading</option>
-          <option value="mystical">Mystical</option>
-          <option value="rainy">Rainy Night</option>
-          <option value="dark">Dark &amp; Mysterious</option>
-          <option value="romantic">Dreamy &amp; Romantic</option>
-        </select>
+        <div class="sound-copy-text">
+          <strong>Library soundtrack</strong>
+          <small>Sound on for the full experience</small>
+          <div class="playlist-picker">
+            <label for="playlistSelect">Atmosphere</label>
+            <select id="playlistSelect" aria-label="Choose library atmosphere">
+              <option value="fantasy">Fantasy &amp; Epic</option>
+              <option value="focused">Focused Reading</option>
+              <option value="mystical">Mystical</option>
+              <option value="rainy">Rainy Night</option>
+              <option value="dark">Dark &amp; Mysterious</option>
+              <option value="romantic">Dreamy &amp; Romantic</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="sound-controls">
         <button class="sound-switch" id="soundToggle" type="button" role="switch" aria-checked="false" aria-label="Turn library soundtrack on">
