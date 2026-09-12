@@ -1237,6 +1237,17 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
         <span class="sound-note">♪</span>
         <div><strong>Library soundtrack</strong><small>Sound on for the full experience</small></div>
       </div>
+      <div class="playlist-picker" style="margin:8px 0 12px">
+        <label for="playlistSelect" style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.72;margin-right:8px">Atmosphere</label>
+        <select id="playlistSelect" aria-label="Choose library atmosphere" style="background:#17120f;color:#e8d8b0;border:1px solid #5d4931;border-radius:999px;padding:7px 12px;font:inherit">
+          <option value="fantasy">Fantasy &amp; Epic</option>
+          <option value="focused">Focused Reading</option>
+          <option value="mystical">Mystical</option>
+          <option value="rainy">Rainy Night</option>
+          <option value="dark">Dark &amp; Mysterious</option>
+          <option value="romantic">Dreamy &amp; Romantic</option>
+        </select>
+      </div>
       <div class="sound-controls">
         <button class="sound-switch" id="soundToggle" type="button" role="switch" aria-checked="false" aria-label="Turn library soundtrack on">
           <span class="sound-state off">OFF</span>
@@ -1971,21 +1982,33 @@ const libraryMusic=document.getElementById('libraryMusic');
 const soundToggle=document.getElementById('soundToggle');
 const soundError=document.getElementById('soundError');
 const volumeSlider=document.getElementById('volumeSlider');
+const playlistSelect=document.getElementById('playlistSelect');
 
-const soundtrack=[
-  {src:'assets/alex-morgan-fantasy-adventure-quest-537478.mp3',title:'Fantasy Adventure Quest'},
-  {src:'assets/alex-morgan-flute-meadow-breeze-melody-578506.mp3',title:'Flute Meadow Breeze'},
-  {src:'assets/kaazoom-beneath-the-whispering-pines-ethereal-elf-choir-363285.mp3',title:'Beneath the Whispering Pines'},
-  {src:'assets/luis_humanoide-middle-earth-fantasy-music-inspired-by-lord-of-the-rings-261464.mp3',title:'Middle Earth'}
-];
+const playlists={
+  fantasy:[
+    {src:'assets/alex-morgan-fantasy-adventure-quest-537478.mp3',title:'Fantasy Adventure Quest'},
+    {src:'assets/alex-morgan-flute-meadow-breeze-melody-578506.mp3',title:'Flute Meadow Breeze'},
+    {src:'assets/kaazoom-beneath-the-whispering-pines-ethereal-elf-choir-363285.mp3',title:'Beneath the Whispering Pines'},
+    {src:'assets/luis_humanoide-middle-earth-fantasy-music-inspired-by-lord-of-the-rings-261464.mp3',title:'Middle Earth'}
+  ],
+  focused:[],
+  mystical:[],
+  rainy:[],
+  dark:[],
+  romantic:[]
+};
+let activePlaylist=localStorage.getItem('midnight-playlist')||'fantasy';
+if(!playlists[activePlaylist])activePlaylist='fantasy';
+playlistSelect.value=activePlaylist;
+let soundtrack=playlists[activePlaylist];
 let soundtrackIndex=0;
 const prevTrack=document.getElementById('prevTrack');
 const nextTrack=document.getElementById('nextTrack');
 const trackTitle=document.getElementById('trackTitle');
-const initialVolume=1;
+const savedVolume=Number(localStorage.getItem('midnight-volume'));
+const initialVolume=Number.isFinite(savedVolume)?savedVolume:1;
 libraryMusic.volume=initialVolume;
-volumeSlider.value=100;
-localStorage.setItem('midnight-volume','1');
+volumeSlider.value=Math.round(initialVolume*100);
 function paintVolume(){
   const v=Number(volumeSlider.value);
   volumeSlider.style.background='linear-gradient(90deg,#c6a15b 0 '+v+'%,#3a3024 '+v+'% 100%)';
@@ -1999,6 +2022,14 @@ volumeSlider.addEventListener('input',()=>{
 });
 
 function loadSoundtrack(index){
+  if(!soundtrack.length){
+    libraryMusic.pause();
+    libraryMusic.removeAttribute('src');
+    libraryMusic.load();
+    trackTitle.textContent='Awaiting new sounds…';
+    updateSoundUI(false);
+    return;
+  }
   soundtrackIndex=(index+soundtrack.length)%soundtrack.length;
   const track=soundtrack[soundtrackIndex];
   if(libraryMusic.getAttribute('src')!==track.src){
@@ -2013,7 +2044,13 @@ function updateSoundUI(on){
 }
 async function playSoundtrack(){
   soundError.classList.remove('show');
-  if(!libraryMusic.src) loadSoundtrack(soundtrackIndex);
+  if(!soundtrack.length){
+    soundError.textContent='This atmosphere is waiting for its first soundtrack.';
+    soundError.classList.add('show');
+    updateSoundUI(false);
+    return;
+  }
+  if(!libraryMusic.getAttribute('src')) loadSoundtrack(soundtrackIndex);
   try{
     await libraryMusic.play();
     localStorage.setItem('midnight-music','on');
@@ -2024,6 +2061,16 @@ async function playSoundtrack(){
     soundError.classList.add('show');
   }
 }
+playlistSelect.addEventListener('change',async()=>{
+  const wasPlaying=!libraryMusic.paused;
+  activePlaylist=playlistSelect.value;
+  localStorage.setItem('midnight-playlist',activePlaylist);
+  soundtrack=playlists[activePlaylist];
+  soundtrackIndex=0;
+  soundError.classList.remove('show');
+  loadSoundtrack(0);
+  if(wasPlaying&&soundtrack.length)await playSoundtrack();
+});
 soundToggle.addEventListener('click',async()=>{
   if(libraryMusic.paused){
     await playSoundtrack();
@@ -2034,6 +2081,7 @@ soundToggle.addEventListener('click',async()=>{
   }
 });
 async function changeTrack(step){
+  if(!soundtrack.length)return;
   const wasPlaying=!libraryMusic.paused;
   loadSoundtrack(soundtrackIndex+step);
   libraryMusic.currentTime=0;
@@ -2042,11 +2090,13 @@ async function changeTrack(step){
 prevTrack.addEventListener('click',()=>changeTrack(-1));
 nextTrack.addEventListener('click',()=>changeTrack(1));
 libraryMusic.addEventListener('ended',async()=>{
+  if(!soundtrack.length)return;
   loadSoundtrack(soundtrackIndex+1);
   libraryMusic.currentTime=0;
   await playSoundtrack();
 });
 libraryMusic.addEventListener('error',()=>{
+  if(!libraryMusic.getAttribute('src'))return;
   updateSoundUI(false);
   soundError.textContent='One soundtrack file could not be loaded.';
   soundError.classList.add('show');
